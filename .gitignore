@@ -3,3 +3,4 @@ backendSrc/MonoCMS/obj/
 backendSrc/.vs/
 frontendSrc/node_modules/
 frontendSrc/.idea/
+!dist/MonoCMS.exe
