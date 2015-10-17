@@ -13,7 +13,7 @@ namespace MonoCMS.Services
 
         public static void init()
         {
-            webServer = new WebServer();
+            webServer = new WebServer(Config.webServer.ipAddress, Config.webServer.port);
         }
     }
 }

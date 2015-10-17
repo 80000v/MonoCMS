@@ -1,0 +1,16 @@
+{
+	"webServer": {
+		"ipAddress": "127.0.0.1",
+		"port": 80
+	},
+	"logsConfig": {
+		"logsPath": "logs",
+		"errorFileName": "errors.log",
+		"warningFileName": "warnings.log",
+		"succesFileName": "succes.log"
+	},
+	"dbConfig": {
+		"user": "test",
+		"password": "test"
+	}
+}

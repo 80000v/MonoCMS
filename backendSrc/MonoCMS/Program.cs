@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using System.Threading.Tasks;
+using System.Threading;
 using MonoCMS.Services;
 
 namespace MonoCMS
@@ -12,12 +12,19 @@ namespace MonoCMS
         static void Main(string[] args)
         {
 
+            Console.WriteLine("Starting MonoCMS...");
+
             // launch services
-            WebServerService.init();
+            Config.init();
             LoggerService.init();
+            WebServerService.init();
 
             // bind controllers
-
+            
+            Console.WriteLine("MonoCMS succesfuly started.");
+            Console.WriteLine("");
+            Console.WriteLine("Press any key for exit...");
+            Console.ReadLine();
 
         }
     }
