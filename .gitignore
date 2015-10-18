@@ -10,7 +10,7 @@
 **/.idea/
 # Build from dist
 !dist/MonoCMS.exe
-!dist/*.exe
+!dist/*.dll
 
 # Ignore NuGet Packages
 *.nupkg
