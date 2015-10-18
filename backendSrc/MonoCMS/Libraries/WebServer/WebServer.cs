@@ -17,7 +17,7 @@ namespace MonoCMS.Libraries.WebServer
         {
             tcpListener = new TcpListener(IPAddress.Parse(ip), port);
 
-            Console.WriteLine("Server succesfuly start on addres {0}:{1}.", ip, port);
+            Console.WriteLine("Server successfully start on address {0}:{1}.", ip, port);
         }
     }
 }

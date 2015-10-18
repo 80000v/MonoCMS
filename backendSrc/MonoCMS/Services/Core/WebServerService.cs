@@ -5,7 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using MonoCMS.Libraries.WebServer;
 
-namespace MonoCMS.Services
+namespace MonoCMS.Services.Core
 {
     class WebServerService
     {
@@ -13,7 +13,18 @@ namespace MonoCMS.Services
 
         public static void init()
         {
+
+            Console.WriteLine("\nBegin web server service initialization...");
+
             webServer = new WebServer(Config.webServer.ipAddress, Config.webServer.port);
+
+            Console.WriteLine("Web server service initialized successfully.");
         }
+
+        public static void addRequestHandler(string method, string path, Func<int> handler)
+        {
+
+        }
+
     }
 }

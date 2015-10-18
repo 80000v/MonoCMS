@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading;
-using MonoCMS.Services;
+using MonoCMS.Services.Core;
 
 namespace MonoCMS
 {
@@ -21,9 +21,8 @@ namespace MonoCMS
 
             // bind controllers
             
-            Console.WriteLine("MonoCMS succesfuly started.");
-            Console.WriteLine("");
-            Console.WriteLine("Press any key for exit...");
+            Console.WriteLine("\nMonoCMS successfully started.");
+            Console.WriteLine("\nPress any key for exit...");
             Console.ReadLine();
 
         }

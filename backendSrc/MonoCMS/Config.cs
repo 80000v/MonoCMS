@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 using System.IO;
 using Newtonsoft.Json;
 using MonoCMS.Models.ConfigModels;
-using MonoCMS.Services;
+using MonoCMS.Services.Core;
 
 namespace MonoCMS
 {
@@ -23,7 +23,11 @@ namespace MonoCMS
             string path = System.IO.Path.GetDirectoryName(System.Reflection.Assembly.GetExecutingAssembly().Location);
 
             try
-            {   // Open the text file using a stream reader.
+            {
+
+                Console.WriteLine("\nBegin config initialization...");
+
+                // Open the text file using a stream reader.
                 using (StreamReader sr = new StreamReader(path + Path.DirectorySeparatorChar + "config.json"))
                 {
                     // Read the stream to a string, and write the string to the console.
@@ -34,13 +38,13 @@ namespace MonoCMS
                     logs = commonConfig.logsConfig;
                     webServer = commonConfig.webServer;
 
-                    Console.WriteLine("Config initial successful.");
+                    Console.WriteLine("Config initialized successfully.");
                 }
             }
             catch (Exception e)
             {
 
-                Console.WriteLine("\nError on read \"config.json\", programm can not by start:");
+                Console.WriteLine("\nError on read \"config.json\", program can not by start:");
                 Console.WriteLine(e.Message);
 
                 LoggerService.writeError(e.Message, e.StackTrace);

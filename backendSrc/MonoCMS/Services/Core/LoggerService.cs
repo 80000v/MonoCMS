@@ -5,7 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.IO;
 
-namespace MonoCMS.Services
+namespace MonoCMS.Services.Core
 {
     class LoggerService
     {
@@ -18,6 +18,8 @@ namespace MonoCMS.Services
         public static void init()
         {
 
+            Console.WriteLine("\nBegin logger service initialization...");
+
             // get parameters from string
             logPatch = Config.logs.logsPath;
             logErrorsFile = Config.logs.errorFileName;
@@ -25,6 +27,8 @@ namespace MonoCMS.Services
             logSuccesFile = Config.logs.succesFileName;
 
             watchUnexpectedError();
+
+            Console.WriteLine("Logger service initialized successfully.");
         }
 
         public static void writeError(string text, string stack)
