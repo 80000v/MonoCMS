@@ -1,10 +1,16 @@
 ﻿
-backendSrc/MonoCMS/bin/
-backendSrc/MonoCMS/obj/
-backendSrc/.vs/
-frontendSrc/node_modules/
-frontendSrc/.idea/
+# Builds of app (have copy in dist)
+**/MonoCMS/bin/
+**/MonoCMS/obj/
+# VS IDE presets
+**/.vs/
+# Javascript dependecies
+**/node_modules/
+# IDEA IDE presets
+**/.idea/
+# Build from dist
 !dist/MonoCMS.exe
+!dist/*.exe
 
 # Ignore NuGet Packages
 *.nupkg
