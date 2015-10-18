@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace MonoCMS.Services
+namespace MonoCMS.Services.CMS
 {
     class PostsService
     {
