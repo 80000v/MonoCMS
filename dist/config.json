@@ -10,7 +10,12 @@
 		"succesFileName": "succes.log"
 	},
 	"dbConfig": {
-		"user": "test",
-		"password": "test"
+		"host": "127.0.0.1",
+		"port": 5632,		
+		
+		"user": "postgres",
+		"password": "postgres",
+		
+		"database": "postgres"
 	}
 }

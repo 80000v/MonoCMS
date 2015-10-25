@@ -13,10 +13,11 @@ namespace MonoCMS
         {
 
             Console.WriteLine("Starting MonoCMS...");
-
+            
             // launch services
             Config.init();
             LoggerService.init();
+            DBConnectionService.init();
             WebServerService.init();
 
             // bind controllers

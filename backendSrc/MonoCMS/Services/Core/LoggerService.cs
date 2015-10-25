@@ -11,20 +11,26 @@ namespace MonoCMS.Services.Core
     {
 
         private static string logPatch = "logs";
-        private static string logErrorsFile = logPatch + "/errors.log";
-        private static string logWarningsFile = logPatch + "/warnings.log";
-        private static string logSuccesFile = logPatch + "/succes.log";
+        private static string logErrorsFile = logPatch + "errors.log";
+        private static string logWarningsFile = logPatch + "warnings.log";
+        private static string logSuccesFile = logPatch + "succes.log";
 
         public static void init()
         {
 
             Console.WriteLine("\nBegin logger service initialization...");
-
+            
+            string path = System.IO.Path.GetDirectoryName(System.Reflection.Assembly.GetExecutingAssembly().Location);
+            
             // get parameters from string
-            logPatch = Config.logs.logsPath;
-            logErrorsFile = Config.logs.errorFileName;
-            logWarningsFile = Config.logs.warningFileName;
-            logSuccesFile = Config.logs.succesFileName;
+            logPatch = path + Path.DirectorySeparatorChar + Config.logs.logsPath;
+            logErrorsFile = path + Path.DirectorySeparatorChar + Config.logs.logsPath + Path.DirectorySeparatorChar + Config.logs.errorFileName;
+            logWarningsFile = path + Path.DirectorySeparatorChar + Config.logs.logsPath + Path.DirectorySeparatorChar + Config.logs.warningFileName;
+            logSuccesFile = path + Path.DirectorySeparatorChar + Config.logs.logsPath + Path.DirectorySeparatorChar + Config.logs.succesFileName;
+
+            Console.WriteLine("Errors log will by writes in file: {0}.", logErrorsFile);
+            Console.WriteLine("Warnings log will by writes in file: {0}.", logErrorsFile);
+            Console.WriteLine("Success log will by writes in file: {0}.", logErrorsFile);
 
             watchUnexpectedError();
 
@@ -52,7 +58,7 @@ namespace MonoCMS.Services.Core
             using (StreamWriter streamWriter = File.AppendText(logErrorsFile))
             {
                 streamWriter.WriteLine("");
-                streamWriter.WriteLine(DateTime.Today);
+                streamWriter.WriteLine(DateTime.Now);
                 streamWriter.WriteLine("{0}:", text);
                 streamWriter.WriteLine(stack);
                 streamWriter.Close();

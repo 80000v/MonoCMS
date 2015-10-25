@@ -2,12 +2,14 @@
 # Builds of app (have copy in dist)
 **/MonoCMS/bin/
 **/MonoCMS/obj/
-# VS IDE presets
+
+# Varios IDE presets
 **/.vs/
+**/.idea/
+
 # Javascript dependecies
 **/node_modules/
-# IDEA IDE presets
-**/.idea/
+
 # Build from dist
 !dist/MonoCMS.exe
 !dist/*.dll

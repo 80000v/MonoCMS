@@ -10,7 +10,7 @@ namespace MonoCMS.Models.ConfigModels
     {
 
         public string ipAddress = "127.0.0.1";
-        public byte port = 80;
+        public ushort port = 8000;
         
     }
 }

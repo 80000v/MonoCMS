@@ -9,12 +9,14 @@ namespace MonoCMS.Services.Core
 {
     class WebServerService
     {
+
         private static WebServer webServer;
 
         public static void init()
         {
 
             Console.WriteLine("\nBegin web server service initialization...");
+            Console.WriteLine("Launch web server on address {0}:{1}...", Config.webServer.ipAddress, Config.webServer.port);
 
             webServer = new WebServer(Config.webServer.ipAddress, Config.webServer.port);
 

@@ -9,7 +9,7 @@ namespace MonoCMS.Models.ConfigModels
     class LogsConfig
     {
 
-        public string logsPath = "logs/";
+        public string logsPath = "logs";
 
         public string errorFileName = "errors.log";
         public string warningFileName = "warnings.log";

@@ -2,9 +2,10 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using System.Threading.Tasks;
+using System.Threading;
 using System.Net;
 using System.Net.Sockets;
+using System.Diagnostics;
 
 namespace MonoCMS.Libraries.WebServer
 {
@@ -12,12 +13,37 @@ namespace MonoCMS.Libraries.WebServer
     {
 
         private TcpListener tcpListener;
-
+        
         public WebServer(string ip, int port)
         {
             tcpListener = new TcpListener(IPAddress.Parse(ip), port);
-
-            Console.WriteLine("Server successfully start on address {0}:{1}.", ip, port);
+            Thread listenerThread = new Thread(startListening);
+            listenerThread.Start();
         }
+
+        private void startListening()
+        {
+
+            tcpListener.Start();
+            
+            while (true)
+            {
+                TcpClient client = tcpListener.AcceptTcpClient();
+                WebServerClient webClient = new WebServerClient(client);
+                Thread Thread = new Thread(webClient.process);
+                Thread.Start();
+            }
+
+        }
+
+        ~WebServer()
+        {
+
+            if (tcpListener != null)
+            {
+                tcpListener.Stop();
+            }
+        }
+
     }
 }
