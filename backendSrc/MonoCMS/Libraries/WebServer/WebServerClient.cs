@@ -2,9 +2,10 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using System.Threading.Tasks;
+using System.Threading;
 using System.Net;
 using System.Net.Sockets;
+using System.Text.RegularExpressions;
 using MonoCMS.Libraries.WebServer;
 
 namespace MonoCMS.Libraries.WebServer
@@ -12,56 +13,151 @@ namespace MonoCMS.Libraries.WebServer
     class WebServerClient
     {
 
-        public static uint activeClients = 0;
-        public static uint totalClients = 0;
-        
+        public static Regex regex = new Regex(@"^(\S+)\s(\S+)\s(\S+)\r\n([\s\S]+)\r\n\r\n", RegexOptions.None);
+
         public string method;
         public string protocol;
         public string url;
-        public Dictionary<string, string> headers;
+        public Dictionary<string, string> headers = new Dictionary<string, string>();
         public TcpClient tcpClietn;
+        public string body;
+        public bool isHaveBody = false;
 
-        public WebServerClient(TcpClient tcpClietn)
+        private WebServer webServer;
+        private byte[] buffer;
+
+        public WebServerClient(WebServer webserver, TcpClient tcpClietn)
         {
 
             this.tcpClietn = tcpClietn;
+            this.webServer = webserver;
 
-            WebServerClient.activeClients += 1;
-            WebServerClient.totalClients += 1;
+            webServer.activeClients += 1;
+            webServer.totalClients += 1;
 
         }
 
-        public void process(Object stateInfo)
+        public void process()
         {
+            
+            string request = "";
+            buffer = new byte[Config.webServer.requestBufferSize];
+            int count;
+            int headersLength = 0;
 
-            Console.WriteLine("Actives: {0}, total: {1}", WebServerClient.activeClients, WebServerClient.totalClients);
-
-            string Request = "";
-            byte[] Buffer = new byte[1024];
-            int Count;
-            while ((Count = tcpClietn.GetStream().Read(Buffer, 0, Buffer.Length)) > 0)
+            // read headers and content length
+            while ((count = tcpClietn.GetStream().Read(buffer, 0, buffer.Length)) > 0)
             {
-                Request += Encoding.ASCII.GetString(Buffer, 0, Count);
-                if (Request.IndexOf("\r\n\r\n") >= 0 || Request.Length > 4096)
+                request += Encoding.ASCII.GetString(buffer, 0, count);
+                // if have end of headers
+                headersLength = request.IndexOf("\r\n\r\n");
+                if (headersLength > -1)
                 {
                     break;
                 }
+
+                // if headers to long
+                if (request.Length > Config.webServer.headersSizeLimit)
+                {
+                    sendStatusCodeAndClose(414);
+                    return;
+                }
+
+                // if client to slow
+                if (false)
+                {
+                    sendStatusCodeAndClose(408);
+                    return;
+                }
+                // todo
             }
 
-            string Html = "<html><body><h1>It works!</h1></body></html>";
-            string Str = "HTTP/1.1 200 OK\nContent-type: text/html\nContent-Length:" + Html.Length.ToString() + "\n\n" + Html;
-            Buffer = Encoding.ASCII.GetBytes(Str);
-            tcpClietn.GetStream().Write(Buffer, 0, Buffer.Length);
+            // parse request            
+            MatchCollection matches = regex.Matches(request);
+            if (matches.Count == 1)
+            {
+                GroupCollection groups = matches[0].Groups;
+                if (groups.Count == 5) // correct parsed headers
+                {
+                    isHaveBody = groups[0].Length != (headersLength + 4);
+                    method = groups[1].Value;
+                    url = groups[2].Value;
+                    protocol = groups[3].Value;
+                    headers.Add("all", groups[4].Value);
+                }
+                else // uncorrect parsed headers
+                {
+                    sendStatusCodeAndClose(431);
+                    return;
+                }                
+            }
+            else // error on parse request
+            {
+                sendStatusCodeAndClose(400);
+                return;
+            }
+
+            Console.WriteLine($"{isHaveBody} {method} {url} {protocol}");
+            
+            // continue read request body if needed
+            if (isHaveBody)
+            {
+
+            } else
+            {
+                if (webServer.listenersList.ContainsKey(method))
+                {
+                    if (webServer.listenersList[method].ContainsKey(url))
+                    {
+                        sendResponseAndClose(webServer.listenersList[method][url](this));
+                    } else
+                    {
+                        sendStatusCodeAndClose(404);
+                        return;
+                    }
+                } else
+                {
+                    sendStatusCodeAndClose(404);
+                    return;
+                }
+            }
+
+            // request handler
+            sendStatusCodeAndClose(500);
+        }
+
+        public void sendStatusCodeAndClose(int statusCode) {
+            if (tcpClietn.Connected)
+            {
+                string Html = $"<html><body><h1>{Models.StatusCodeDictionary.codes[statusCode]}</h1></body></html>";
+                string Str = $"HTTP/1.1 {statusCode} OK\nContent-type: text/html\nContent-Length:{Html.Length.ToString()}\n\n" + Html;
+                buffer = Encoding.ASCII.GetBytes(Str);
+                tcpClietn.GetStream().Write(buffer, 0, buffer.Length);
+                close();
+            }
+        }
+
+        public void sendResponseAndClose(string responseText)
+        {
+            string Str = $"HTTP/1.1 200 OK\nContent-type: text/html\nContent-Length:{responseText.Length.ToString()}\n\n" + responseText;
+            buffer = Encoding.ASCII.GetBytes(Str);
+            tcpClietn.GetStream().Write(buffer, 0, buffer.Length);
+            close();
+        }
+        
+        private void close()
+        {
             tcpClietn.Close();
-
-            WebServerClient.activeClients -= 1;
-
+            webServer.activeClients -= 1;
         }
 
         ~WebServerClient()
         {
-
-            WebServerClient.totalClients -= 1;
+            if (tcpClietn.Connected)
+            {
+                tcpClietn.Close();
+            }
+            webServer.totalClients -= 1;
 
         }
     }

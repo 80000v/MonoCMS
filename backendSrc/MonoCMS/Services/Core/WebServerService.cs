@@ -23,9 +23,9 @@ namespace MonoCMS.Services.Core
             Console.WriteLine("Web server service initialized successfully.");
         }
 
-        public static void addRequestHandler(string method, string path, Func<int> handler)
+        public static void addRequestHandler(string method, string path, Func<WebServerClient, string> handler)
         {
-
+            webServer.addRequestHandler(method, "/api/" + path, handler);
         }
 
     }

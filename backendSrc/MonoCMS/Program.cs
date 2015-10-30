@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading;
 using MonoCMS.Services.Core;
+using MonoCMS.Controllers.CMS;
 
 namespace MonoCMS
 {
@@ -21,7 +22,10 @@ namespace MonoCMS
             WebServerService.init();
 
             // bind controllers
-            
+            Console.WriteLine("\nBegin controllers initialization...");
+            PostsController.init();
+            Console.WriteLine("\nControllers initialized successfully.!");
+
             Console.WriteLine("\nMonoCMS successfully started.");
             Console.WriteLine("\nPress any key for exit...");
             Console.ReadLine();

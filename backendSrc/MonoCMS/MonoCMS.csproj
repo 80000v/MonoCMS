@@ -52,11 +52,13 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Config.cs" />
-    <Compile Include="Controllers\Attachments.cs" />
-    <Compile Include="Controllers\Categories.cs" />
-    <Compile Include="Controllers\PostsController.cs" />
-    <Compile Include="Controllers\Tags.cs" />
-    <Compile Include="Controllers\Taxonomy.cs" />
+    <Compile Include="Controllers\CMS\Attachments.cs" />
+    <Compile Include="Controllers\CMS\Categories.cs" />
+    <Compile Include="Controllers\CMS\PostsController.cs" />
+    <Compile Include="Controllers\CMS\Tags.cs" />
+    <Compile Include="Controllers\CMS\Taxonomy.cs" />
+    <Compile Include="Libraries\WebServer\Models\ResponseCodesEnum.cs" />
+    <Compile Include="Libraries\WebServer\Models\StatusCodeDictionary.cs" />
     <Compile Include="Libraries\WebServer\WebServerClient.cs" />
     <Compile Include="Libraries\WebServer\Services\InputStreamParser.cs" />
     <Compile Include="Libraries\WebServer\WebServer.cs" />
@@ -76,7 +78,7 @@
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="Libraries\WebServer\Models\" />
+    <Folder Include="Controllers\Core\" />
     <Folder Include="Repositories\" />
     <Folder Include="Views\" />
   </ItemGroup>

@@ -4,9 +4,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace MonoCMS.Controllers
+namespace MonoCMS.Libraries.WebServer.Models
 {
-    class Categories
+    class ResponseCodesEnum
     {
     }
 }
