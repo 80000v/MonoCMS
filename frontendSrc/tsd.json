@@ -1,0 +1,21 @@
+{
+  "version": "v4",
+  "repo": "borisyankov/DefinitelyTyped",
+  "ref": "master",
+  "path": "typings",
+  "bundle": "typings/tsd.d.ts",
+  "installed": {
+    "whatwg-fetch/whatwg-fetch.d.ts": {
+      "commit": "1439f6d0209a26c3daf85dac7a48bcc03143baa0"
+    },
+    "es6-promise/es6-promise.d.ts": {
+      "commit": "1439f6d0209a26c3daf85dac7a48bcc03143baa0"
+    },
+    "mithril/mithril.d.ts": {
+      "commit": "581563c4684d405afec14260ba79a89a52666c09"
+    },
+    "es6-collections/es6-collections.d.ts": {
+      "commit": "3191f6e0088eee07c4d8fd24e4d27a40a60d9eb9"
+    }
+  }
+}
