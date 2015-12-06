@@ -1,0 +1,33 @@
+.sidebarComponent
+{
+    position: fixed;
+    top: 0;
+    left: 0;
+
+    box-sizing: border-box;
+    width: 12em;
+    height: 100%;
+    padding-top: 3em;
+
+    color: @whiteColor;
+    background-color: @darkBG;
+
+    .element
+    {
+        line-height: 3em;
+
+        height: 3em;
+        padding-right: 1.5em;
+        cursor: pointer;
+
+        text-align: right;
+        transition-duration: @transitionTime;
+
+        border-bottom: 1px solid rgba(238, 238, 238, .3);
+
+        &:hover
+        {
+            background-color: fade(@whiteBG, 25%);
+        }
+    }
+}

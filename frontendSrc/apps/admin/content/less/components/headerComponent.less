@@ -1,0 +1,58 @@
+.headerComponent
+{
+    position: fixed;
+    top: 0;
+    left: 0;
+
+    width: 100%;
+    height: 3em;
+
+    color: @whiteColor;
+    background-color: @darkBG;
+
+    .logo
+    {
+        font-size: 2em;
+        line-height: 1.5em;
+
+        float: left;
+
+        width: 6em;
+        height: 100%;
+
+        text-align: center;
+    }
+
+    .user
+    {
+        float: right;
+
+        width: 20em;
+        height: 100%;
+
+        .avatar
+        {
+            float: left;
+
+            width: 2.0em;
+            height: 2.0em;
+            margin: .5em .25em;
+
+            border-radius: 50%;
+            background-position: 50%;
+            background-size: cover;
+        }
+
+        .name
+        {
+            margin-top: .5em;
+        }
+
+        .role
+        {
+            font-weight: lighter;
+
+            color: darken(@whiteColor, 25%, relative);
+        }
+    }
+}

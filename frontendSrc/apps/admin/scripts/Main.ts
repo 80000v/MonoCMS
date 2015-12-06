@@ -30,4 +30,4 @@ let shellModule: MithrilComponent<ShellController> = {
 m.route.mode = 'hash';
 
 // define a route
-m.mount(document.getElementById('app'), shellModule);
+m.mount(document.body, shellModule);
