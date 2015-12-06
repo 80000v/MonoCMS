@@ -1,7 +1,9 @@
 {
 	"webServer" : {
 		"ipAddress" : "192.168.137.131",
-		"port" : 8000
+		"port" : 8000,
+		"requestBufferSize": 4096,
+		"headersSizeLimit": 4096
 	},
 	"dbConfig" : {
 		"host" : "127.0.0.1",             // localhost, name.domain.com, 127.0.0.1
@@ -9,6 +11,7 @@
 		"user" : "postgres",              // don't use default user and password, this is not secure
 		"password" : "postgres",          // don't use default user and password, this is not secure
 		"database" : "postgres",          // don't use default database, this is not secure
+		"scheme"   : "MonoCMS",
 		"connectionReservation" : {
 			"min" : 4,
 			"max" : 8

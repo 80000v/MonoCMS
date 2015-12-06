@@ -243,7 +243,7 @@
                     .pipe(htmlmin({collapseWhitespace: true, removeComments: true}))
                     .pipe(replace(/\{_date_\}/g, new Date().getTime()))
                     .pipe(size({title: 'JSP Size: '}))
-                    .pipe(gulp.dest('src/main/webapp/jsp/'));
+                    .pipe(gulp.dest('./../dist/site/' + appNameLC + '/'));
             }
         );
 
@@ -263,9 +263,9 @@
             [appName + '-min-All'],
             function () {
                 livereload.listen();
-                gulp.watch('src/main/webappsrc/**/*.{css,less}', [appName + '-min-LESS']);
-                // gulp.watch('src/main/webappsrc/**/*.{js,ts}', [appName + '-min-TS']);
-                gulp.watch('src/main/webappsrc/**/*.jsp', [appName + '-min-HTML']);
+                gulp.watch('apps/**/*.{css,less}', [appName + '-min-LESS']);
+                // gulp.watch('apps/**/*.{js,ts}', [appName + '-min-TS']);
+                gulp.watch('apps/**/*.html', [appName + '-min-HTML']);
 
                 watchJS = true;
                 gulp.start(appName + '-min-TS');
