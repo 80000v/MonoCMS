@@ -3,16 +3,20 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using MonoCMS.Libraries.WebServer.Models;
 using Npgsql;
 
 namespace MonoCMS.Services.Core
 {
+
     class DBConnectionService
     {
 
         private static string connectionParams = "Host=127.0.0.1;Username=postgres;Password=postgres;Database=postgres";
 
-        private static List<NpgsqlConnection> connections = new List<NpgsqlConnection>();
+        private static List<DBConnection> connections = new List<DBConnection>();
+
+        private static int freeConnections = 0;
 
         public static void init()
         {
@@ -33,21 +37,29 @@ namespace MonoCMS.Services.Core
                 Config.db.database
                 );
 
-            for (int i = 0; i < 10; i += 1)
+            for (int i = 0; i < Config.db.connectionReservation.min; i += 1)
             {
-                using (NpgsqlConnection conn = new NpgsqlConnection(connectionParams))
-                {
-                    conn.Open();
-                    connections.Add(conn);
-
-                    Console.WriteLine("Connection {0} have status: {1}.", i, conn.State);
-
-                }
+                DBConnection conn = new DBConnection(connectionParams);
+                connections.Add(conn);
+                Console.WriteLine("Connection {0} have status: {1}.", i, conn.connection.State);
             }
-            
+
+            freeConnections = connections.Count;
+
             Console.WriteLine("DB connection service initialized successfully.");
 
         }
-        
+
+        public static NpgsqlConnection getFreeConnection()
+        {
+            freeConnections--;
+            return connections[0].connection;
+        }
+
+        public static void returnConnection(NpgsqlConnection connection)
+        {
+            freeConnections++;
+        }
+
     }
 }

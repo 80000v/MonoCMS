@@ -18,7 +18,8 @@ namespace MonoCMS.Libraries.WebServer
         public string method;
         public string protocol;
         public string url;
-        public Dictionary<string, string> headers = new Dictionary<string, string>();
+        public Dictionary<string, string> requestHeaders = new Dictionary<string, string>();
+        public Dictionary<string, string> responseHeaders = new Dictionary<string, string>();
         public TcpClient tcpClietn;
         public string body;
         public bool isHaveBody = false;
@@ -48,7 +49,7 @@ namespace MonoCMS.Libraries.WebServer
             // read headers and content length
             while ((count = tcpClietn.GetStream().Read(buffer, 0, buffer.Length)) > 0)
             {
-                request += Encoding.ASCII.GetString(buffer, 0, count);
+                request += Encoding.UTF8.GetString(buffer, 0, count);
                 // if have end of headers
                 headersLength = request.IndexOf("\r\n\r\n");
                 if (headersLength > -1)
@@ -83,7 +84,7 @@ namespace MonoCMS.Libraries.WebServer
                     method = groups[1].Value;
                     url = groups[2].Value;
                     protocol = groups[3].Value;
-                    headers.Add("all", groups[4].Value);
+                    requestHeaders.Add("all", groups[4].Value);
                 }
                 else // uncorrect parsed headers
                 {
@@ -102,7 +103,7 @@ namespace MonoCMS.Libraries.WebServer
             // continue read request body if needed
             if (isHaveBody)
             {
-
+                // todo: write code for request with headers
             } else
             {
                 if (webServer.listenersList.ContainsKey(method))
@@ -129,9 +130,14 @@ namespace MonoCMS.Libraries.WebServer
         public void sendStatusCodeAndClose(int statusCode) {
             if (tcpClietn.Connected)
             {
-                string Html = $"<html><body><h1>{Models.StatusCodeDictionary.codes[statusCode]}</h1></body></html>";
-                string Str = $"HTTP/1.1 {statusCode} OK\nContent-type: text/html\nContent-Length:{Html.Length.ToString()}\n\n" + Html;
-                buffer = Encoding.ASCII.GetBytes(Str);
+                StringBuilder html = new StringBuilder(300);
+                html.Append("<html><body style=\"background:linear-gradient(135deg, #ffffff 0%,#BFC7CE 100%);text-align:center\">");
+                html.Append("<h1 style=\"font-size:3em;font-family:sans-serif;color:#7F8888;padding-top:20%\">");
+                html.Append(Models.StatusCodeDictionary.codes[statusCode]);
+                html.Append("</h1></body></html>");
+
+                string Str = $"HTTP/1.1 {statusCode} OK\nContent-type: text/html\nContent-Length:{html.Length.ToString()}\n\n" + html;
+                buffer = Encoding.UTF8.GetBytes(Str);
                 tcpClietn.GetStream().Write(buffer, 0, buffer.Length);
                 close();
             }
@@ -139,8 +145,15 @@ namespace MonoCMS.Libraries.WebServer
 
         public void sendResponseAndClose(string responseText)
         {
-            string Str = $"HTTP/1.1 200 OK\nContent-type: text/html\nContent-Length:{responseText.Length.ToString()}\n\n" + responseText;
-            buffer = Encoding.ASCII.GetBytes(Str);
+            StringBuilder headersString = new StringBuilder(300);
+
+            foreach (string key in responseHeaders.Keys)
+            {
+                headersString.Append($"{key}:{responseHeaders[key]}\n");
+            }
+
+            string Str = $"HTTP/1.1 200 OK\n{headersString}Content-Length:{responseText.Length.ToString()}\n\n" + responseText;
+            buffer = Encoding.UTF8.GetBytes(Str);
             tcpClietn.GetStream().Write(buffer, 0, buffer.Length);
             close();
         }

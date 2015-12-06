@@ -34,7 +34,7 @@
     gulp.task('Core-min-Static', function () {
 
         var pathToStatic = [
-            'src/main/webappsrc/clientapps/core/content/**/*.{jpg,gif,png,otf,eot,ttf,woff,woff2,eof,svg,ico,json}'
+            'apps/core/content/**/*.{jpg,gif,png,otf,eot,ttf,woff,woff2,eof,svg,ico,json}'
         ];
 
         return gulp.src(pathToStatic)

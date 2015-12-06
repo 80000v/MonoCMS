@@ -4,13 +4,37 @@
  */
 
 (function () {
-    "use strict";
-    var gulp = require('gulp');
+    'use strict';
 
-    var requireDir = require('require-dir');
-    var dir = requireDir('./gulptasks');
+    const gulp = require('gulp');
 
-    gulp.task('release', ['Globus-min-CSS', 'Globus-min-JS', 'Globus-min-HTML', 'Globus-min-JSP']);
+    function dropException(message) {
+        throw new Error(message);
+    }
+
+    const minNodeVersion = [5, 1, 1];
+    const nodeVersion = process
+        .version
+        .substring(1, process.version.length)
+        .split('.')
+        .map((value, index) => {
+            return Number(value) < minNodeVersion[index] ?
+                dropException('Ошибка версии Node.js, минимальная версия ' + minNodeVersion.join('.')) : value;
+        });
+
+    global.DEBUG = true;
+    global.APPS_NAMES = [
+        'CMS',
+        'Admin'
+    ];
+
+    const requireDir = require('require-dir');
+    const dir = requireDir('./gulptasks');
+
+    gulp.task(
+        'release',
+        global.APPS_NAMES.map(name => name + '-min-All')
+    );
 
     gulp.task('default', ['release']);
 
