@@ -107,6 +107,7 @@ interface MithrilComponentAttributes {
 }
 
 interface MithrilComponent<TController extends MithrilController> {
+    key: string | number;
     controller(args: MithrilComponentAttributes): TController;
     view(ctrl: TController, args: MithrilComponentAttributes): MithrilVirtualElement;
 }

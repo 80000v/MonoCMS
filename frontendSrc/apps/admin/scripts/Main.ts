@@ -23,7 +23,8 @@ Object.defineProperty(
 
 let shellModule: MithrilComponent<ShellController> = {
     controller: (): ShellController => new ShellController(),
-    view: ShellControllerView
+    view: ShellControllerView,
+    key: 'shellModule'
 };
 
 // setup routes to start w/ the `#` symbol

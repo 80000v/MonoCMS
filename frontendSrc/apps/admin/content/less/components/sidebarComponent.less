@@ -18,16 +18,21 @@
 
         height: 3em;
         padding-right: 1.5em;
-        cursor: pointer;
 
-        text-align: right;
+        cursor: pointer;
         transition-duration: @transitionTime;
+        text-align: right;
 
         border-bottom: 1px solid rgba(238, 238, 238, .3);
 
         &:hover
         {
             background-color: fade(@whiteBG, 25%);
+        }
+
+        &.active{
+            background-color: rgba(130, 213, 239, 0.25);
+            pointer-events: none;
         }
     }
 }
