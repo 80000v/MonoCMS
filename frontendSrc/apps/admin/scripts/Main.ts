@@ -7,8 +7,12 @@
 import {ShellController} from './app/controllers/ShellController';
 import {ShellControllerView} from './app/Views/ShellControllerView';
 
+import {AutoResizeFont} from './../../core/scripts/libs/frameworks/AutoResizeFonts';
+
 declare function require(url: string): MithrilStatic;
 let mithril: MithrilStatic = require('mithril');
+
+AutoResizeFont.bind();
 
 // frameworks
 Object.defineProperty(

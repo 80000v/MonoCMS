@@ -1,4 +1,4 @@
-import {AppManager} from '../../../../../core/scripts/app/models/AppModel';
+import {AppManager} from '../../../../../core/scripts/app/models/viewModels/AppModel';
 import {FrameworkService} from '../../services/FrameworkService';
 
 export class SidebarComponentController {

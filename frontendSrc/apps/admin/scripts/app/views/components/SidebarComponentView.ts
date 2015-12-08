@@ -1,7 +1,7 @@
 /// <reference path="./../../../../../../typings/mithril/mithril.d.ts" />
 
 import {SidebarComponentController} from '../../controllers/components/SidebarComponentController';
-import {App} from '../../../../../core/scripts/app/models/AppModel';
+import {App} from '../../../../../core/scripts/app/models/viewModels/AppModel';
 
 export function SidebarComponentView(ctrl: SidebarComponentController): MithrilVirtualElement {
     'use strict';

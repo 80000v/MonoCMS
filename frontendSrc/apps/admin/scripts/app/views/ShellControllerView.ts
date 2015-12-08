@@ -1,7 +1,7 @@
 /// <reference path="./../../../../../typings/mithril/mithril.d.ts" />
 
 import {ShellController} from '../controllers/ShellController';
-import {App, AppManager} from '../../../../core/scripts/app/models/AppModel';
+import {App, AppManager} from '../../../../core/scripts/app/models/viewModels/AppModel';
 
 // components
 import {HeaderComponentController} from '../controllers/components/HeaderComponentController';
