@@ -21,6 +21,7 @@ namespace MonoCMS.Libraries.WebServer.Models
             codes.Add(101, "Switching Protocols");
             codes.Add(102, "Processing");
             codes.Add(105, "Name Not Resolved");
+
             codes.Add(200, "OK");
             codes.Add(201, "Created");
             codes.Add(202, "Accepted");
@@ -30,6 +31,7 @@ namespace MonoCMS.Libraries.WebServer.Models
             codes.Add(206, "Partial Content");
             codes.Add(207, "Multi - Status");
             codes.Add(226, "IM Used");
+
             codes.Add(300, "Multiple Choices");
             codes.Add(301, "Moved Permanently");
             codes.Add(302, "Moved Temporarily");
@@ -37,6 +39,7 @@ namespace MonoCMS.Libraries.WebServer.Models
             codes.Add(304, "Not Modified");
             codes.Add(305, "Use Proxy");
             codes.Add(307, "Temporary Redirect");
+
             codes.Add(400, "Bad Request");
             codes.Add(401, "Unauthorized");
             codes.Add(402, "Payment Required");
@@ -65,6 +68,7 @@ namespace MonoCMS.Libraries.WebServer.Models
             codes.Add(449, "Retry With");
             codes.Add(451, "Unavailable For Legal Reasons");
             codes.Add(456, "Unrecoverable Error");
+
             codes.Add(500, "Internal Server Error");
             codes.Add(501, "Not Implemented");
             codes.Add(502, "Bad Gateway");

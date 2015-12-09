@@ -110,7 +110,14 @@ namespace MonoCMS.Libraries.WebServer
                 {
                     if (webServer.listenersList[method].ContainsKey(url))
                     {
-                        sendResponseAndClose(webServer.listenersList[method][url](this));
+                        try {
+                            sendResponseAndClose(webServer.listenersList[method][url](this));
+                        } catch (Exception exc)
+                        {
+                            Console.WriteLine(exc);
+                            sendStatusCodeAndClose(500);
+                            return;
+                        }
                     } else
                     {
                         sendStatusCodeAndClose(404);

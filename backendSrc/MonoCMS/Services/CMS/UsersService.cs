@@ -7,12 +7,12 @@ using MonoCMS.Repositories.CMS;
 
 namespace MonoCMS.Services.CMS
 {
-    class PostsService
+    class UsersService
     {
 
-        public static string getPosts()
+        public static string getAllUsers()
         {
-            return PostsRepository.getPosts();
+            return UsersRepository.getAllUsers();
         }
 
     }

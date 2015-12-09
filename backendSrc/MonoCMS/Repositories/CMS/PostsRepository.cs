@@ -8,7 +8,7 @@ using Npgsql;
 
 namespace MonoCMS.Repositories.CMS
 {
-    class PostRepository
+    class PostsRepository
     {
 
         private static string schemeName = Config.db.scheme;

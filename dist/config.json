@@ -1,6 +1,6 @@
 {
 	"webServer" : {
-		"ipAddress" : "192.168.137.131",
+		"ipAddress" : "any",
 		"port" : 8000,
 		"requestBufferSize": 4096,
 		"headersSizeLimit": 4096

@@ -52,24 +52,24 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Config.cs" />
-    <Compile Include="Controllers\CMS\Attachments.cs" />
-    <Compile Include="Controllers\CMS\Categories.cs" />
     <Compile Include="Controllers\CMS\PostsController.cs" />
-    <Compile Include="Controllers\CMS\Tags.cs" />
-    <Compile Include="Controllers\CMS\Taxonomy.cs" />
+    <Compile Include="Controllers\CMS\UsersController.cs" />
     <Compile Include="Libraries\WebServer\MIMETypesClass.cs" />
     <Compile Include="Libraries\WebServer\Models\DBConnectionClass.cs" />
     <Compile Include="Libraries\WebServer\Models\ResponseCodesEnum.cs" />
     <Compile Include="Libraries\WebServer\Models\StatusCodeDictionary.cs" />
     <Compile Include="Libraries\WebServer\WebServerClient.cs" />
     <Compile Include="Libraries\WebServer\WebServer.cs" />
+    <Compile Include="Models\CMS\UserModel.cs" />
     <Compile Include="Models\ConfigModels\CommonConfig.cs" />
     <Compile Include="Models\ConfigModels\DBConfig.cs" />
     <Compile Include="Models\ConfigModels\LogsConfig.cs" />
     <Compile Include="Models\ConfigModels\WebServerConfig.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Repositories\CMS\PostRepository.cs" />
+    <Compile Include="Repositories\CMS\UsersRepository.cs" />
+    <Compile Include="Repositories\CMS\PostsRepository.cs" />
+    <Compile Include="Services\CMS\UsersService.cs" />
     <Compile Include="Services\Core\DBConnectionService.cs" />
     <Compile Include="Services\Core\LoggerService.cs" />
     <Compile Include="Services\CMS\PostsService.cs" />
@@ -81,7 +81,6 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Controllers\Core\" />
-    <Folder Include="Models\CMS\" />
     <Folder Include="Views\" />
   </ItemGroup>
   <ItemGroup>

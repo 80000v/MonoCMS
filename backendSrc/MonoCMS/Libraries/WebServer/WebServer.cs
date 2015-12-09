@@ -42,10 +42,11 @@ namespace MonoCMS.Libraries.WebServer
         public WebServer(string ip, int port)
         {
             Models.StatusCodeDictionary.init();
-            tcpListener = new TcpListener(IPAddress.Parse(ip), port);
+            tcpListener = new TcpListener(ip == "any" ? IPAddress.Any : IPAddress.Parse(ip), port);
             Thread listenerThread = new Thread(startListening);
             listenerThread.Start();
         }
+
 
         public void addRequestHandler(string method, string path, Func<WebServerClient, string> handler)
         {

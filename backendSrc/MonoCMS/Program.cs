@@ -24,6 +24,8 @@ namespace MonoCMS
             // bind controllers
             Console.WriteLine("\nBegin controllers initialization...");
             PostsController.init();
+            UsersController.init();
+
             Console.WriteLine("\nControllers initialized successfully.!");
 
             Console.WriteLine("\nMonoCMS successfully started.");

@@ -55,6 +55,7 @@
 
     gulp.task(
         'Core-Watch-Backend',
+        ['Core-min-Backend'],
         function () {
             gulp.watch('./../backendSrc/MonoCMS/bin/Release/**/*.{exe,dll}', ['Core-min-Backend']);
         }
