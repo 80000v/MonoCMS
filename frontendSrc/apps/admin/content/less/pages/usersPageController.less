@@ -1,13 +1,132 @@
 .usersPageController
 {
-    font-size: 4em;
-
+    box-sizing: border-box;
     width: 100%;
     height: 100%;
-    padding-top: 20%;
-
-    text-align: center;
-    box-sizing: border-box;
 
     color: @darkColor;
+
+    .section
+    {
+        display: inline-block;
+
+        box-sizing: border-box;
+        height: 100%;
+        padding: 1em;
+
+        vertical-align: top;
+
+        &.list
+        {
+            width: 33%;
+        }
+
+        &.setting
+        {
+            width: 66%;
+        }
+    }
+
+    .title
+    {
+        font-size: 2em;
+
+        width: 100%;
+        margin-bottom: 1em;
+
+        border-bottom: 2px solid @darkBG;
+    }
+
+    table
+    {
+        width: 100%;
+
+        border-collapse: collapse;
+
+        tr
+        {
+            cursor: pointer;
+
+            &.selected
+            {
+                background-color: fade(@darkBG, 20%, relative);
+            }
+
+            &:hover
+            {
+                background-color: fade(@darkBG, 10%, relative);
+            }
+
+            &.header
+            {
+                pointer-events: none;
+
+                border-bottom: 1px solid @darkBG;
+
+                td
+                {
+                    font-weight: bolder;
+
+                    padding: .0em .25em .5em .25em;
+                }
+            }
+
+            td
+            {
+                overflow: hidden;
+
+                padding: .5em .25em;
+            }
+        }
+    }
+
+    .infoBlock
+    {
+        display: inline-block;
+
+        box-sizing: border-box;
+        width: 50%;
+        padding-right: 2em;
+
+        .header
+        {
+            font-weight: bolder;
+
+            width: 100%;
+            padding: .0em .25em .5em .25em;
+
+            border-bottom: 1px solid @darkBG;
+        }
+
+        .element
+        {
+            margin: .5em 0;
+
+            label
+            {
+                line-height: 1.5em;
+
+                margin: .25em .5em;
+            }
+
+            input
+            {
+                float: right;
+
+                box-sizing: border-box;
+                width: 60%;
+                padding: .25em .5em;
+
+                transition-duration: @transitionTime;
+
+                border: none;
+                border-bottom: 1px solid #c4cbd2;
+
+                &:focus
+                {
+                    border-bottom: 2px solid #9baec2;
+                }
+            }
+        }
+    }
 }

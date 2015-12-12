@@ -2,12 +2,14 @@
 
 import {ShellController} from '../controllers/ShellController';
 import {App, AppManager} from '../../../../core/scripts/app/models/viewModels/AppModel';
+import {UrlParam} from './../../../../core/scripts/libs/frameworks/UrlParams';
+import {URLService} from '../../../../core/scripts/app/services/URLService';
 
 // components
 import {HeaderComponentController} from '../controllers/components/HeaderComponentController';
 import {HeaderComponentView} from './components/HeaderComponentView';
 
-let headerComponent: MithrilComponent<HeaderComponentController> = {
+const headerComponent: MithrilComponent<HeaderComponentController> = {
     controller: (): HeaderComponentController => new HeaderComponentController(),
     view: HeaderComponentView,
     key: 'headerComponent'
@@ -16,7 +18,7 @@ let headerComponent: MithrilComponent<HeaderComponentController> = {
 import {SidebarComponentController} from '../controllers/components/SidebarComponentController';
 import {SidebarComponentView} from './components/SidebarComponentView';
 
-let sidebarComponent: MithrilComponent<SidebarComponentController> = {
+const sidebarComponent: MithrilComponent<SidebarComponentController> = {
     controller: (args: {appManager: AppManager}): SidebarComponentController => new SidebarComponentController(args),
     view: SidebarComponentView,
     key: 'sidebarComponent'
@@ -26,18 +28,24 @@ let sidebarComponent: MithrilComponent<SidebarComponentController> = {
 import {HomePageController} from '../controllers/pages/HomePageController';
 import {HomePageView} from './pages/HomePageView';
 
-let homePage: App = new App(() => new HomePageController(), HomePageView);
-homePage.key = '00-Home';
-homePage.title = 'Домашняя';
+const homePage: App = new App(() => new HomePageController(), HomePageView);
+homePage.key = 'home'; // for mithril differ
+homePage.title = 'Home';
 
 import {UsersPageController} from '../controllers/pages/UsersPageController';
 import {UsersPageView} from './pages/UsersPageView';
 
-let usersPage: App = new App(() => new UsersPageController(), UsersPageView);
-usersPage.key = '01-Users';
-usersPage.title = 'Пользователи';
+const usersPage: App = new App(() => new UsersPageController(), UsersPageView);
+usersPage.key = 'users'; // for mithril differ
+usersPage.title = 'Users';
 
-let appManager: AppManager = new AppManager(homePage, [homePage, usersPage]);
+const currentAppKey: string = UrlParam.getUrlParams().get('app');
+const appManager: AppManager = new AppManager(homePage, [homePage, usersPage]);
+for (let i: number = 0; i < appManager.listOfApps.length; i += 1) {
+    if (appManager.listOfApps[i].key === currentAppKey) {
+        appManager.currentApp = appManager.listOfApps[i];
+    }
+}
 
 export function ShellControllerView(ctrl: ShellController): MithrilVirtualElement {
     'use strict';

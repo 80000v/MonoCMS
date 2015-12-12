@@ -10,7 +10,7 @@ import {ShellControllerView} from './app/Views/ShellControllerView';
 import {AutoResizeFont} from './../../core/scripts/libs/frameworks/AutoResizeFonts';
 
 declare function require(url: string): MithrilStatic;
-let mithril: MithrilStatic = require('mithril');
+const mithril: MithrilStatic = require('mithril');
 
 AutoResizeFont.bind();
 
@@ -25,7 +25,7 @@ Object.defineProperty(
         configurable: true
     });
 
-let shellModule: MithrilComponent<ShellController> = {
+const shellModule: MithrilComponent<ShellController> = {
     controller: (): ShellController => new ShellController(),
     view: ShellControllerView,
     key: 'shellModule'

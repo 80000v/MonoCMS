@@ -46,7 +46,7 @@
     gulp.task('Core-min-Backend', function () {
 
         var pathToBackend = [
-            './../backendSrc/MonoCMS/bin/Release/**/*.{exe,dll}'
+            './../backendSrc/MonoCMS/bin/Release/**/*.{MonoCMS.exe,dll}'
         ];
 
         return gulp.src(pathToBackend)

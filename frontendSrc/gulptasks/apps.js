@@ -173,7 +173,7 @@
                             target: 'ES5',
                             module: 'commonjs',
                             noImplicitAny: true,
-                            suppressImplicitAnyIndexErrors: true,
+                            suppressImplicitAnyIndexErrors: false,
                             experimentalDecorators: true,
                             experimentalAsyncFunctions: true
                         }

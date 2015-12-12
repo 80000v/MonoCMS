@@ -15,8 +15,9 @@ namespace MonoCMS.Repositories.CMS
         private static string schemeName = Config.db.scheme;
         
         private static string getAllUsersCommand = "SELECT json_agg(r)" +
-                                                    "FROM(SELECT t.id AS id, " +
-                                                                "t.login AS id," +
+                                                     "FROM (SELECT " +
+                                                                "t.id AS id, " +
+                                                                "t.login AS login," +
                                                                 "t.pass AS pass," +
                                                                 "t.nicename AS nicename," +
                                                                 "t.email AS email," +
