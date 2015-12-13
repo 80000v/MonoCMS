@@ -1,11 +1,11 @@
-import {AppManager} from '../../../../../core/scripts/app/models/viewModels/AppModel';
+import {PagesManager} from '../../../../../core/scripts/app/models/viewModels/AppModel';
 import {FrameworkService} from '../../services/FrameworkService';
 
 export class SidebarComponentController {
 
-    public appManage: AppManager;
+    public appManage: PagesManager;
 
-    constructor(args: {appManager: AppManager}) {
+    constructor(args: {appManager: PagesManager}) {
         console.log('Start sidebar controller.');
         this.appManage = args.appManager;
     }

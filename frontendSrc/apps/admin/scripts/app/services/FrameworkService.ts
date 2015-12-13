@@ -1,4 +1,3 @@
-
 /// <reference path="./../../../../../typings/mithril/mithril.d.ts" />
 
 export class FrameworkService {

@@ -6,6 +6,7 @@ import {FrameworkService} from '../../services/FrameworkService';
 export class UsersPageController {
 
     public selectedUser: User;
+    public userBackUp: User;
     public listOfUsers: User[] = [];
 
     constructor() {
@@ -21,7 +22,64 @@ export class UsersPageController {
     public selectUser(user: User): void {
         console.log('Select user: ', user);
         this.selectedUser = user;
-        FrameworkService.redraw();
+        this.userBackUp = new User().deserialize(this.selectedUser);
+    }
+
+    public createNewUser(): void {
+        console.log('Create and select new user.');
+        this.selectUser(new User(void 0, void 0, 'New User'));
+    }
+
+    public cancelUserChanges(): void {
+        const index: number = this.listOfUsers.indexOf(this.selectedUser);
+        if (index > -1) {
+            this.listOfUsers[index] = new User().deserialize(this.userBackUp);
+            this.selectedUser = this.listOfUsers[index];
+        } else {
+            this.selectedUser = void 0;
+        }
+    }
+
+    public saveUser(user: User): void {
+        if (user.id === -1) {
+            user.id = null;
+            UserService
+                .createUser(user)
+                .then(() => {
+                    console.log('New User saved.');
+                    FrameworkService.redraw();
+                })
+                .catch((error: ErrorEvent) => {
+                    user.id = -1;
+                    console.log('Error on saving new user: ', error);
+                });
+        } else {
+            UserService
+                .updateUser(user)
+                .then(() => {
+                    console.log('User updated.');
+                    FrameworkService.redraw();
+                })
+                .catch((error: ErrorEvent) => {
+                    console.log('Error on update user: ', error);
+                });
+        }
+    }
+
+    public deleteUser(user: User): void {
+        if (user.id !== -1) {
+            UserService
+                .deleteUser(user.id)
+                .then(() => {
+                    console.log('User deleted.');
+                    FrameworkService.redraw();
+                })
+                .catch((error: ErrorEvent) => {
+                    console.log('Error on deleting user: ', error);
+                });
+        } else {
+            this.selectedUser = void 0;
+        }
     }
 
     private updateAllUsersList(): void {

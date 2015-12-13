@@ -1,14 +1,14 @@
 /// <reference path="./../../../../../../typings/mithril/mithril.d.ts" />
 
 import {SidebarComponentController} from '../../controllers/components/SidebarComponentController';
-import {App} from '../../../../../core/scripts/app/models/viewModels/AppModel';
+import {Page} from '../../../../../core/scripts/app/models/viewModels/AppModel';
 
 export function SidebarComponentView(ctrl: SidebarComponentController): MithrilVirtualElement {
     'use strict';
 
     return m(
         'div.sidebarComponent',
-        ctrl.appManage.listOfApps.map((app: App, index: number) => {
+        ctrl.appManage.listOfApps.map((app: Page, index: number) => {
             return m(
                 'div.element',
                 {

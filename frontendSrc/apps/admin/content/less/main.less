@@ -31,3 +31,24 @@ body
     height: 100%;
     padding: 3em 0 0 12em;
 }
+
+.button
+{
+    display: inline-block;
+
+    margin: .25em;
+    padding: .5em 1em;
+
+    cursor: pointer;
+    transition-duration: @transitionTime;
+
+    color: @whiteColor;
+    background-color: @darkBG;
+    border-radius: 0.4em;
+    user-select: none;
+
+    &:hover
+    {
+        background-color: fade(@darkBG, 50%, relative);
+    }
+}

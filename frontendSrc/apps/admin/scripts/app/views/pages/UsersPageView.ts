@@ -17,6 +17,18 @@ export function UsersPageView(ctrl: UsersPageController): MithrilVirtualElement 
                         'Users list:'
                     ),
                     m(
+                        'div.controls',
+                        [
+                            m(
+                                'div.button',
+                                {
+                                    onclick: (): void => ctrl.createNewUser()
+                                },
+                                'Add User'
+                            )
+                        ]
+                    ),
+                    m(
                         'table',
                         [
                             m(
@@ -81,6 +93,32 @@ export function UsersPageView(ctrl: UsersPageController): MithrilVirtualElement 
                         'User editing:'
                     ),
                     ctrl.selectedUser !== void 0 ? m(
+                        'div.controls',
+                        [
+                            m(
+                                'div.button',
+                                {
+                                    onclick: (): void => ctrl.saveUser(ctrl.selectedUser)
+                                },
+                                ctrl.selectedUser.id !== -1 ? 'Save Changes' : 'Save New User'
+                            ),
+                            m(
+                                'div.button',
+                                {
+                                    onclick: (): void => ctrl.cancelUserChanges()
+                                },
+                                'Cancel Changes'
+                            ),
+                            m(
+                                'div.button',
+                                {
+                                    onclick: (): void => ctrl.deleteUser(ctrl.selectedUser)
+                                },
+                                'Delete User'
+                            )
+                        ]
+                    ) : null,
+                    ctrl.selectedUser !== void 0 ? m(
                         'div.infoBlock',
                         [
                             m(
@@ -131,6 +169,36 @@ export function UsersPageView(ctrl: UsersPageController): MithrilVirtualElement 
                                         }
                                     )
                                 ]
+                            ),
+                            m(
+                                'div.element',
+                                [
+                                    m(
+                                        'label',
+                                        'Registered:'
+                                    ),
+                                    m(
+                                        'input',
+                                        {
+                                            value: ctrl.selectedUser.registered
+                                        }
+                                    )
+                                ]
+                            ),
+                            m(
+                                'div.element',
+                                [
+                                    m(
+                                        'label',
+                                        'Status:'
+                                    ),
+                                    m(
+                                        'input',
+                                        {
+                                            value: ctrl.selectedUser.status
+                                        }
+                                    )
+                                ]
                             )
 
                         ]
@@ -147,12 +215,12 @@ export function UsersPageView(ctrl: UsersPageController): MithrilVirtualElement 
                                 [
                                     m(
                                         'label',
-                                        'Login:'
+                                        'EMail:'
                                     ),
                                     m(
                                         'input',
                                         {
-                                            value: ctrl.selectedUser.login
+                                            value: ctrl.selectedUser.email
                                         }
                                     )
                                 ]
@@ -162,12 +230,12 @@ export function UsersPageView(ctrl: UsersPageController): MithrilVirtualElement 
                                 [
                                     m(
                                         'label',
-                                        'Nice name:'
+                                        'URL:'
                                     ),
                                     m(
                                         'input',
                                         {
-                                            value: ctrl.selectedUser.nicename
+                                            value: ctrl.selectedUser.url
                                         }
                                     )
                                 ]

@@ -22,7 +22,7 @@ interface RequestInit {
 	headers?: HeaderInit|{ [index: string]: string };
 	body?: BodyInit;
 	mode?: RequestMode;
-	credentials?: RequestCredentials;
+	credentials?: string;
 	cache?: RequestCache;
 }
 
