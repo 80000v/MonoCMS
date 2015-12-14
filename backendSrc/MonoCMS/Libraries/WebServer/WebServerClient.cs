@@ -13,7 +13,8 @@ namespace MonoCMS.Libraries.WebServer
     class WebServerClient
     {
 
-        public static Regex regex = new Regex(@"^(\S+)\s(\S+)\s(\S+)\r\n([\s\S]+)\r\n\r\n", RegexOptions.None);
+        public static Regex regexRequest = new Regex(@"^(\S+)\s(\S+)\s(\S+)\r\n([\s\S]+)\r\n\r\n", RegexOptions.None);
+        public static Regex regexHeaders = new Regex(@"^([\s\S]+?):([\s\S]+?)\n?$", RegexOptions.Multiline);
 
         public string method;
         public string protocol;
@@ -26,6 +27,8 @@ namespace MonoCMS.Libraries.WebServer
 
         private WebServer webServer;
         private byte[] buffer;
+        private string encoding;
+        private int contentLength;
 
         public WebServerClient(WebServer webserver, TcpClient tcpClietn)
         {
@@ -40,20 +43,27 @@ namespace MonoCMS.Libraries.WebServer
 
         public void process()
         {
-            
+
             string request = "";
             buffer = new byte[Config.webServer.requestBufferSize];
             int count;
             int headersLength = 0;
 
-            // read headers and content length
-            while ((count = tcpClietn.GetStream().Read(buffer, 0, buffer.Length)) > 0)
+            /**
+            *
+            * Part 1: read headers and content length
+            *
+            */
+            NetworkStream clientStream = tcpClietn.GetStream();
+
+            while ((count = clientStream.Read(buffer, 0, buffer.Length)) > 0)
             {
                 request += Encoding.UTF8.GetString(buffer, 0, count);
                 // if have end of headers
                 headersLength = request.IndexOf("\r\n\r\n");
                 if (headersLength > -1)
                 {
+                    headersLength += 4;
                     break;
                 }
 
@@ -73,68 +83,144 @@ namespace MonoCMS.Libraries.WebServer
                 // todo
             }
 
-            // parse request            
-            MatchCollection matches = regex.Matches(request);
-            if (matches.Count == 1)
+            /**
+            *
+            * Part 2: parse headers
+            *
+            */
+            MatchCollection matchesRequest = regexRequest.Matches(request);
+            if (matchesRequest.Count == 1)
             {
-                GroupCollection groups = matches[0].Groups;
-                if (groups.Count == 5) // correct parsed headers
+
+                GroupCollection groupsRequest = matchesRequest[0].Groups;
+                if (groupsRequest.Count == 5) // correct parsed headers
                 {
-                    isHaveBody = groups[0].Length != (headersLength + 4);
-                    method = groups[1].Value;
-                    url = groups[2].Value;
-                    protocol = groups[3].Value;
-                    requestHeaders.Add("all", groups[4].Value);
+
+                    method = groupsRequest[1].Value;
+                    url = groupsRequest[2].Value;
+                    protocol = groupsRequest[3].Value;
+
+                    MatchCollection matchesHeaders = regexHeaders.Matches(groupsRequest[4].Value);
+                    if (matchesHeaders.Count > -1)
+                    {
+                        for (ushort i = 0; i < matchesHeaders.Count; i += 1)
+                        {
+
+                            requestHeaders.Add(matchesHeaders[i].Groups[1].Value, matchesHeaders[i].Groups[2].Value);
+
+                            if (matchesHeaders[i].Groups[1].Value == "Content-Length")
+                            {
+                                bool succes = int.TryParse(matchesHeaders[i].Groups[2].Value, out contentLength);
+
+                                if (!succes)
+                                {
+                                    sendStatusCodeAndClose(400);
+                                    return;
+                                }
+
+                                isHaveBody = true;
+
+                            }
+
+                        }
+
+                    }
+                    else
+                    {
+                        sendStatusCodeAndClose(431);
+                        return;
+                    }
+
                 }
                 else // uncorrect parsed headers
                 {
                     sendStatusCodeAndClose(431);
                     return;
-                }                
+                }
+
+
             }
             else // error on parse request
             {
+
                 sendStatusCodeAndClose(400);
                 return;
+
             }
 
             Console.WriteLine($"{isHaveBody} {method} {url} {protocol}");
-            
-            // continue read request body if needed
-            if (isHaveBody)
+
+            /**
+            *
+            * Part 3: wait body and process request
+            *
+            */
+            if (
+                webServer.listenersList.ContainsKey(method) &&
+                webServer.listenersList[method].ContainsKey(url)
+                )
             {
-                // todo: write code for request with headers
-            } else
-            {
-                if (webServer.listenersList.ContainsKey(method))
+                Console.WriteLine("222222");
+                // continue read request body if needed
+                if (isHaveBody)
                 {
-                    if (webServer.listenersList[method].ContainsKey(url))
+                    Console.WriteLine("3333333");
+                    while ((count = clientStream.Read(buffer, 0, buffer.Length)) > 0)
                     {
-                        try {
-                            sendResponseAndClose(webServer.listenersList[method][url](this));
-                        } catch (Exception exc)
+                        Console.WriteLine("44444444444444");
+                        request += Encoding.UTF8.GetString(buffer, 0, count);
+
+                        Console.WriteLine("{0} - {1} - {2}", request.Length, headersLength, contentLength, headersLength + contentLength);
+
+                        // if content length equal body size
+                        if (request.Length == headersLength + contentLength) // + content length
                         {
-                            Console.WriteLine(exc);
-                            sendStatusCodeAndClose(500);
+                            body = request.Substring(headersLength, request.Length);
+                            Console.WriteLine(body);
+                            break;
+                        }
+
+                        // if content length equal body size
+                        if (request.Length > headersLength + this.contentLength) // + content length
+                        {
+                            sendStatusCodeAndClose(413);
                             return;
                         }
-                    } else
-                    {
-                        sendStatusCodeAndClose(404);
-                        return;
+
+                        // if client to slow
+                        if (false)
+                        {
+                            sendStatusCodeAndClose(408);
+                            return;
+                        }
+
                     }
-                } else
+                }
+
+                try
                 {
-                    sendStatusCodeAndClose(404);
+                    sendResponseAndClose(webServer.listenersList[method][url](this));
+                }
+                catch (Exception exc)
+                {
+                    Console.WriteLine(exc);
+                    sendStatusCodeAndClose(500);
                     return;
                 }
+
+            }
+            else
+            {
+                sendStatusCodeAndClose(405);
+                return;
             }
 
             // request handler
             sendStatusCodeAndClose(500);
         }
 
-        public void sendStatusCodeAndClose(int statusCode) {
+        public void sendStatusCodeAndClose(int statusCode)
+        {
             if (tcpClietn.Connected)
             {
                 StringBuilder html = new StringBuilder(300);
@@ -143,7 +229,11 @@ namespace MonoCMS.Libraries.WebServer
                 html.Append(Models.StatusCodeDictionary.codes[statusCode]);
                 html.Append("</h1></body></html>");
 
-                string Str = $"HTTP/1.1 {statusCode} OK\nContent-type: text/html\nContent-Length:{html.Length.ToString()}\n\n" + html;
+                string Str = String.Join(
+                    $"HTTP/1.1 {statusCode} {Models.StatusCodeDictionary.codes[statusCode]}\n",
+                    "Content-type: text/html\nContent-Length:{html.Length.ToString()}\n\n",
+                    html
+                );
                 buffer = Encoding.UTF8.GetBytes(Str);
                 tcpClietn.GetStream().Write(buffer, 0, buffer.Length);
                 close();
@@ -164,7 +254,7 @@ namespace MonoCMS.Libraries.WebServer
             tcpClietn.GetStream().Write(buffer, 0, buffer.Length);
             close();
         }
-        
+
         private void close()
         {
             tcpClietn.Close();

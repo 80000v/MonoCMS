@@ -8,15 +8,23 @@ namespace MonoCMS.Models.CMS
 {
     class User
     {
-        public int id;
-        public string login;
-        public string pass;
-        public string nicename;
-        public string email;
-        public string url;
-        public string registered;
-        public string activation_key;
-        public string status;
-        public string display_name;
+
+        public int id = -1;
+        public string login = "New User";
+        public string password = "";
+        public string nicename = "";
+        public string email = "";
+        public string url = "";
+        public string registered = "";
+        public string activationKey = "";
+        public string status = "";
+        public string viewName = "";
+
+        User()
+        {
+            
+        }
+        
     }
+
 }

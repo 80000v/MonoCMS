@@ -135,7 +135,10 @@ export function UsersPageView(ctrl: UsersPageController): MithrilVirtualElement 
                                     m(
                                         'input',
                                         {
-                                            value: ctrl.selectedUser.login
+                                            value: ctrl.selectedUser.login,
+                                            onkeyup: function (): void {
+                                                ctrl.selectedUser.login = this.value;
+                                            }
                                         }
                                     )
                                 ]
@@ -150,7 +153,10 @@ export function UsersPageView(ctrl: UsersPageController): MithrilVirtualElement 
                                     m(
                                         'input',
                                         {
-                                            value: ctrl.selectedUser.nicename
+                                            value: ctrl.selectedUser.nicename,
+                                            onkeyup: function (): void {
+                                                ctrl.selectedUser.nicename = this.value;
+                                            }
                                         }
                                     )
                                 ]
@@ -165,7 +171,10 @@ export function UsersPageView(ctrl: UsersPageController): MithrilVirtualElement 
                                     m(
                                         'input',
                                         {
-                                            value: ctrl.selectedUser.viewName
+                                            value: ctrl.selectedUser.viewName,
+                                            onkeyup: function (): void {
+                                                ctrl.selectedUser.viewName = this.value;
+                                            }
                                         }
                                     )
                                 ]
@@ -180,7 +189,10 @@ export function UsersPageView(ctrl: UsersPageController): MithrilVirtualElement 
                                     m(
                                         'input',
                                         {
-                                            value: ctrl.selectedUser.registered
+                                            value: ctrl.selectedUser.registered,
+                                            onkeyup: function (): void {
+                                                ctrl.selectedUser.registered = this.value;
+                                            }
                                         }
                                     )
                                 ]
@@ -195,7 +207,10 @@ export function UsersPageView(ctrl: UsersPageController): MithrilVirtualElement 
                                     m(
                                         'input',
                                         {
-                                            value: ctrl.selectedUser.status
+                                            value: ctrl.selectedUser.status,
+                                            onkeyup: function (): void {
+                                                ctrl.selectedUser.status = this.value;
+                                            }
                                         }
                                     )
                                 ]
@@ -220,7 +235,10 @@ export function UsersPageView(ctrl: UsersPageController): MithrilVirtualElement 
                                     m(
                                         'input',
                                         {
-                                            value: ctrl.selectedUser.email
+                                            value: ctrl.selectedUser.email,
+                                            onkeyup: function (): void {
+                                                ctrl.selectedUser.email = this.value;
+                                            }
                                         }
                                     )
                                 ]
@@ -235,7 +253,10 @@ export function UsersPageView(ctrl: UsersPageController): MithrilVirtualElement 
                                     m(
                                         'input',
                                         {
-                                            value: ctrl.selectedUser.url
+                                            value: ctrl.selectedUser.url,
+                                            onkeyup: function (): void {
+                                                ctrl.selectedUser.url = this.value;
+                                            }
                                         }
                                     )
                                 ]
@@ -250,7 +271,10 @@ export function UsersPageView(ctrl: UsersPageController): MithrilVirtualElement 
                                     m(
                                         'input',
                                         {
-                                            value: ctrl.selectedUser.viewName
+                                            value: ctrl.selectedUser.viewName,
+                                            onkeyup: function (): void {
+                                                ctrl.selectedUser.viewName = this.value;
+                                            }
                                         }
                                     )
                                 ]

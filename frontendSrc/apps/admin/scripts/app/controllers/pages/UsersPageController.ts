@@ -42,7 +42,6 @@ export class UsersPageController {
 
     public saveUser(user: User): void {
         if (user.id === -1) {
-            user.id = null;
             UserService
                 .createUser(user)
                 .then(() => {
@@ -50,7 +49,6 @@ export class UsersPageController {
                     FrameworkService.redraw();
                 })
                 .catch((error: ErrorEvent) => {
-                    user.id = -1;
                     console.log('Error on saving new user: ', error);
                 });
         } else {
