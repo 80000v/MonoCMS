@@ -16,9 +16,19 @@ namespace MonoCMS.Services.CMS
             return UsersRepository.getAllUsers();
         }
 
-        public static string createUser(User user)
+        public static void createUser(User user)
         {
-            return UsersRepository.createUser(user);
+            UsersRepository.createUser(user);
+        }
+
+        public static void updateUser(User user)
+        {
+            UsersRepository.updateUser(user);
+        }
+
+        public static void deleteUser(int id)
+        {
+            UsersRepository.deleteUser(id);
         }
 
     }

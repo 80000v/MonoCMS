@@ -8,7 +8,7 @@ export class User {
     public url: string;
     public registered: Date;
     public activationKey: string;
-    public status: string;
+    public status: number;
     public viewName: string;
 
     constructor(login?: string,
@@ -18,17 +18,17 @@ export class User {
                 url?: string,
                 registered?: Date,
                 activationKey?: string,
-                status?: string,
+                status?: number,
                 viewName?: string) {
 
         this.login = login !== void 0 ? login : '';
-        this.password = password !== void 0 ? password : null;
+        this.password = password !== void 0 ? password : '';
         this.nicename = nicename !== void 0 ? nicename : '';
         this.email = email !== void 0 ? email : '';
         this.url = url !== void 0 ? url : '';
         this.registered = registered !== void 0 ? registered : new Date();
         this.activationKey = activationKey !== void 0 ? activationKey : '';
-        this.status = status !== void 0 ? status : '';
+        this.status = status !== void 0 ? status : 0;
         this.viewName = viewName !== void 0 ? viewName : '';
 
     }

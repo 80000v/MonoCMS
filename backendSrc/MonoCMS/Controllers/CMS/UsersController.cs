@@ -25,9 +25,7 @@ namespace MonoCMS.Controllers.CMS
         {
 
             User user = JsonConvert.DeserializeObject<User>(webServerClient.body);
-            Console.WriteLine(user);
-            // UsersService.createUser(user);
-            webServerClient.sendStatusCodeAndClose(200);
+            UsersService.createUser(user);
             return "user successfully created";
 
         }
@@ -36,10 +34,18 @@ namespace MonoCMS.Controllers.CMS
         {
 
             User user = JsonConvert.DeserializeObject<User>(webServerClient.body);
-            Console.WriteLine(user);
-            // UsersService.createUser(user);
-            webServerClient.sendStatusCodeAndClose(200);
+            UsersService.updateUser(user);
             return "user successfully updated";
+
+        }
+
+        public static string deleteUser(WebServerClient webServerClient)
+        {
+            int id;
+            int.TryParse(webServerClient.body, out id);
+            Console.WriteLine("{0} - {1}", webServerClient.body, id);
+            UsersService.deleteUser(id);
+            return "user successfully deleted";
 
         }
 
@@ -48,6 +54,7 @@ namespace MonoCMS.Controllers.CMS
             WebServerService.addRequestHandler("GET", basepath + "all", getAllUsers);
             WebServerService.addRequestHandler("POST", basepath + "create", createUser);
             WebServerService.addRequestHandler("POST", basepath + "update", updateUser);
+            WebServerService.addRequestHandler("POST", basepath + "delete", deleteUser);
         }
 
     }

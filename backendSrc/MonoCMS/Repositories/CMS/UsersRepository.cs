@@ -17,15 +17,15 @@ namespace MonoCMS.Repositories.CMS
         private static string getAllUsersCommand = "SELECT json_agg(r)" +
                                                      "FROM (SELECT " +
                                                                 $"t.id AS {nameof(User.id)}, " +
-                                                                "t.login AS login," +
-                                                                "t.pass AS pass," +
-                                                                "t.nicename AS nicename," +
-                                                                "t.email AS email," +
-                                                                "t.url AS url," +
-                                                                "t.registered AS registered," +
-                                                                "t.activation_key AS activation_key," +
-                                                                "t.status AS status," +
-                                                                "t.display_name AS viewName " +
+                                                                $"t.login AS {nameof(User.login)}," +
+                                                                $"t.pass AS {nameof(User.password)}," +
+                                                                $"t.nicename AS {nameof(User.nicename)}," +
+                                                                $"t.email AS {nameof(User.email)}," +
+                                                                $"t.url AS {nameof(User.url)}," +
+                                                                $"t.registered AS {nameof(User.registered)}," +
+                                                                $"t.activation_key AS {nameof(User.activationKey)}," +
+                                                                $"t.status AS {nameof(User.status)}," +
+                                                                $"t.display_name AS {nameof(User.viewName)} " +
                                                             $"FROM \"{schemeName}\".users as t" +
                                                             ") r";
 
@@ -52,43 +52,78 @@ namespace MonoCMS.Repositories.CMS
             return result;
         }
 
-        private static string createUsersCommand = "SELECT json_agg(r)" +
-                                                     "FROM (SELECT " +
-                                                                "t.id AS id, " +
-                                                                "t.login AS login," +
-                                                                "t.pass AS pass," +
-                                                                "t.nicename AS nicename," +
-                                                                "t.email AS email," +
-                                                                "t.url AS url," +
-                                                                "t.registered AS registered," +
-                                                                "t.activation_key AS activation_key," +
-                                                                "t.status AS status," +
-                                                                "t.display_name AS viewName " +
-                                                            $"FROM \"{schemeName}\".users as t" +
-                                                            ") r";
+        private static string createUsersCommand = $"INSERT INTO \"{schemeName}\".users" +
+            "(login, pass, nicename, email, url, registered, activation_key, status, display_name) " +
+            "VALUES(@login, @pass, @nicename, @email, @url, @registered, @activation_key, @status, @display_name);";
 
-        public static string createUser(User user)
+        public static void createUser(User user)
         {
 
             NpgsqlConnection connection = DBConnectionService.getFreeConnection();
-            NpgsqlCommand command = new NpgsqlCommand(getAllUsersCommand, connection);
-            NpgsqlDataReader reader = command.ExecuteReader();
+            NpgsqlCommand command = new NpgsqlCommand(createUsersCommand, connection);
 
-            string result;
-            if (reader.HasRows)
-            {
-                reader.Read();
-                result = reader.GetString(0);
-            }
-            else
-            {
-                result = "[]";
-            }
+            // cmd.Parameters.Add(new NpgsqlParameter("pw", tb2.Text));
+            command.Parameters.AddWithValue("@login", NpgsqlTypes.NpgsqlDbType.Text, user.login);
+            command.Parameters.AddWithValue("@pass", NpgsqlTypes.NpgsqlDbType.Text, user.password);
+            command.Parameters.AddWithValue("@nicename", NpgsqlTypes.NpgsqlDbType.Text, user.nicename);
+            command.Parameters.AddWithValue("@email", NpgsqlTypes.NpgsqlDbType.Text, user.email);
+            command.Parameters.AddWithValue("@url", NpgsqlTypes.NpgsqlDbType.Text, user.url);
+            command.Parameters.AddWithValue("@registered", NpgsqlTypes.NpgsqlDbType.TimestampTZ, user.registered);
+            command.Parameters.AddWithValue("@activation_key", NpgsqlTypes.NpgsqlDbType.Text, user.activationKey);
+            command.Parameters.AddWithValue("@status", NpgsqlTypes.NpgsqlDbType.Integer, user.status);
+            command.Parameters.AddWithValue("@display_name", NpgsqlTypes.NpgsqlDbType.Text, user.viewName);
+            int result = command.ExecuteNonQuery();
 
-            reader.Close();
+            Console.WriteLine(result);
+
             DBConnectionService.returnConnection(connection);
+        }
 
-            return result;
+        private static string updateUsersCommand = $"UPDATE \"{schemeName}\".users " +
+            "SET login = @login, pass = @pass, nicename = @nicename, email = @email, url = @url, registered = @registered, activation_key = @activation_key, " +
+                "status = @status, display_name = @display_name " +
+            "WHERE id = @id;";
+
+        public static void updateUser(User user)
+        {
+
+            NpgsqlConnection connection = DBConnectionService.getFreeConnection();
+            NpgsqlCommand command = new NpgsqlCommand(updateUsersCommand, connection);
+
+            // cmd.Parameters.Add(new NpgsqlParameter("pw", tb2.Text));
+            command.Parameters.AddWithValue("@id", NpgsqlTypes.NpgsqlDbType.Integer, user.id);
+            command.Parameters.AddWithValue("@login", NpgsqlTypes.NpgsqlDbType.Text, user.login);
+            command.Parameters.AddWithValue("@pass", NpgsqlTypes.NpgsqlDbType.Text, user.password);
+            command.Parameters.AddWithValue("@nicename", NpgsqlTypes.NpgsqlDbType.Text, user.nicename);
+            command.Parameters.AddWithValue("@email", NpgsqlTypes.NpgsqlDbType.Text, user.email);
+            command.Parameters.AddWithValue("@url", NpgsqlTypes.NpgsqlDbType.Text, user.url);
+            command.Parameters.AddWithValue("@registered", NpgsqlTypes.NpgsqlDbType.TimestampTZ, user.registered);
+            command.Parameters.AddWithValue("@activation_key", NpgsqlTypes.NpgsqlDbType.Text, user.activationKey);
+            command.Parameters.AddWithValue("@status", NpgsqlTypes.NpgsqlDbType.Integer, user.status);
+            command.Parameters.AddWithValue("@display_name", NpgsqlTypes.NpgsqlDbType.Text, user.viewName);
+            int result = command.ExecuteNonQuery();
+
+            Console.WriteLine(result);
+
+            DBConnectionService.returnConnection(connection);
+        }
+
+        private static string deleteUserCommand = $"DELETE FROM \"{schemeName}\".users " +
+                                                         "WHERE id = @id;";
+
+        public static void deleteUser(int id)
+        {
+
+            NpgsqlConnection connection = DBConnectionService.getFreeConnection();
+            NpgsqlCommand command = new NpgsqlCommand(deleteUserCommand, connection);
+
+            // cmd.Parameters.Add(new NpgsqlParameter("pw", tb2.Text));
+            command.Parameters.AddWithValue("@id", NpgsqlTypes.NpgsqlDbType.Integer, id);
+            int result = command.ExecuteNonQuery();
+
+            Console.WriteLine(result);
+
+            DBConnectionService.returnConnection(connection);
         }
 
     }

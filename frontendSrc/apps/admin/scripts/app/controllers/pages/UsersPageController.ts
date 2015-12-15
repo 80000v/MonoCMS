@@ -46,6 +46,7 @@ export class UsersPageController {
                 .createUser(user)
                 .then(() => {
                     console.log('New User saved.');
+                    this.updateAllUsersList();
                     FrameworkService.redraw();
                 })
                 .catch((error: ErrorEvent) => {
@@ -56,6 +57,7 @@ export class UsersPageController {
                 .updateUser(user)
                 .then(() => {
                     console.log('User updated.');
+                    this.updateAllUsersList();
                     FrameworkService.redraw();
                 })
                 .catch((error: ErrorEvent) => {
@@ -70,6 +72,7 @@ export class UsersPageController {
                 .deleteUser(user.id)
                 .then(() => {
                     console.log('User deleted.');
+                    this.updateAllUsersList();
                     FrameworkService.redraw();
                 })
                 .catch((error: ErrorEvent) => {

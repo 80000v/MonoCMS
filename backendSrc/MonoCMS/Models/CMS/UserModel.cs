@@ -17,7 +17,7 @@ namespace MonoCMS.Models.CMS
         public string url = "";
         public string registered = "";
         public string activationKey = "";
-        public string status = "";
+        public int status = 0;
         public string viewName = "";
 
         User()

@@ -152,7 +152,7 @@ namespace MonoCMS.Libraries.WebServer
 
             /**
             *
-            * Part 3: wait body and process request
+            * Part 3: check method handler, wait body (if needed) and process request
             *
             */
             if (
@@ -160,40 +160,46 @@ namespace MonoCMS.Libraries.WebServer
                 webServer.listenersList[method].ContainsKey(url)
                 )
             {
-                Console.WriteLine("222222");
+
                 // continue read request body if needed
                 if (isHaveBody)
                 {
-                    Console.WriteLine("3333333");
-                    while ((count = clientStream.Read(buffer, 0, buffer.Length)) > 0)
+
+                    // if complete request body
+                    if (request.Length == headersLength + contentLength)
                     {
-                        Console.WriteLine("44444444444444");
-                        request += Encoding.UTF8.GetString(buffer, 0, count);
-
-                        Console.WriteLine("{0} - {1} - {2}", request.Length, headersLength, contentLength, headersLength + contentLength);
-
-                        // if content length equal body size
-                        if (request.Length == headersLength + contentLength) // + content length
+                        body = request.Substring(headersLength);
+                    }
+                    else
+                    {
+                        while ((count = clientStream.Read(buffer, 0, buffer.Length)) > 0)
                         {
-                            body = request.Substring(headersLength, request.Length);
-                            Console.WriteLine(body);
-                            break;
-                        }
 
-                        // if content length equal body size
-                        if (request.Length > headersLength + this.contentLength) // + content length
-                        {
-                            sendStatusCodeAndClose(413);
-                            return;
-                        }
+                            request += Encoding.UTF8.GetString(buffer, 0, count);
 
-                        // if client to slow
-                        if (false)
-                        {
-                            sendStatusCodeAndClose(408);
-                            return;
-                        }
+                            // if content length equal body size
+                            if (request.Length == headersLength + contentLength) // + content length
+                            {
+                                body = request.Substring(headersLength, request.Length);
+                                Console.WriteLine(body);
+                                break;
+                            }
 
+                            // if content length equal body size
+                            if (request.Length > headersLength + this.contentLength) // + content length
+                            {
+                                sendStatusCodeAndClose(413);
+                                return;
+                            }
+
+                            // if client to slow
+                            if (false)
+                            {
+                                sendStatusCodeAndClose(408);
+                                return;
+                            }
+
+                        }
                     }
                 }
 
@@ -203,7 +209,7 @@ namespace MonoCMS.Libraries.WebServer
                 }
                 catch (Exception exc)
                 {
-                    Console.WriteLine(exc);
+                    Console.WriteLine("Error on handle request: \n{0}", exc);
                     sendStatusCodeAndClose(500);
                     return;
                 }
@@ -221,19 +227,19 @@ namespace MonoCMS.Libraries.WebServer
 
         public void sendStatusCodeAndClose(int statusCode)
         {
+
             if (tcpClietn.Connected)
             {
-                StringBuilder html = new StringBuilder(300);
-                html.Append("<html><body style=\"background:linear-gradient(135deg, #ffffff 0%,#BFC7CE 100%);text-align:center\">");
-                html.Append("<h1 style=\"font-size:3em;font-family:sans-serif;color:#7F8888;padding-top:20%\">");
-                html.Append(Models.StatusCodeDictionary.codes[statusCode]);
-                html.Append("</h1></body></html>");
-
-                string Str = String.Join(
-                    $"HTTP/1.1 {statusCode} {Models.StatusCodeDictionary.codes[statusCode]}\n",
-                    "Content-type: text/html\nContent-Length:{html.Length.ToString()}\n\n",
-                    html
+                string html = String.Concat(
+                    "<html><body style=\"background:linear-gradient(135deg, #ffffff 0%,#BFC7CE 100%);text-align:center\">",
+                    "<h1 style=\"font-size:3em;font-family:sans-serif;color:#7F8888;padding-top:20%\">",
+                    Models.StatusCodeDictionary.codes[statusCode],
+                    "</h1></body></html>"
                 );
+
+                string Str = $"HTTP/1.1 {statusCode} {Models.StatusCodeDictionary.codes[statusCode]}\n" +
+                                $"Content-type: text/html\nContent-Length:{html.Length.ToString()}\n\n" +
+                                html;
                 buffer = Encoding.UTF8.GetBytes(Str);
                 tcpClietn.GetStream().Write(buffer, 0, buffer.Length);
                 close();
