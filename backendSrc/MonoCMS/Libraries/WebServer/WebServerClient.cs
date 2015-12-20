@@ -19,6 +19,7 @@ namespace MonoCMS.Libraries.WebServer
         public string method;
         public string protocol;
         public string url;
+        public string queryParams = "";
         public Dictionary<string, string> requestHeaders = new Dictionary<string, string>();
         public Dictionary<string, string> responseHeaders = new Dictionary<string, string>();
         public TcpClient tcpClietn;
@@ -97,7 +98,16 @@ namespace MonoCMS.Libraries.WebServer
                 {
 
                     method = groupsRequest[1].Value;
-                    url = groupsRequest[2].Value;
+                    int queryBeginPosition = groupsRequest[2].Value.IndexOf("?");
+                    if (queryBeginPosition == -1)
+                    {
+                        url = groupsRequest[2].Value;
+                    }
+                    else
+                    {
+                        url = groupsRequest[2].Value.Substring(0, queryBeginPosition);
+                        queryParams = groupsRequest[2].Value.Substring(queryBeginPosition);
+                    }
                     protocol = groupsRequest[3].Value;
 
                     MatchCollection matchesHeaders = regexHeaders.Matches(groupsRequest[4].Value);
@@ -148,7 +158,7 @@ namespace MonoCMS.Libraries.WebServer
 
             }
 
-            Console.WriteLine($"{isHaveBody} {method} {url} {protocol}");
+            Console.WriteLine($"{method} {url} {queryParams} {protocol} haveBody:{isHaveBody}");
 
             /**
             *
@@ -223,6 +233,7 @@ namespace MonoCMS.Libraries.WebServer
 
             // request handler
             sendStatusCodeAndClose(500);
+
         }
 
         public void sendStatusCodeAndClose(int statusCode)
@@ -255,8 +266,16 @@ namespace MonoCMS.Libraries.WebServer
                 headersString.Append($"{key}:{responseHeaders[key]}\n");
             }
 
-            string Str = $"HTTP/1.1 200 OK\n{headersString}Content-Length:{responseText.Length.ToString()}\n\n" + responseText;
-            buffer = Encoding.UTF8.GetBytes(Str);
+            string responseString;
+            if (responseText == null)
+            {
+                responseString = $"HTTP/1.1 200 OK\n{headersString}\n";
+            } else
+            {
+                responseString = $"HTTP/1.1 200 OK\n{headersString}Content-Length:{responseText.Length.ToString()}\n\n" + responseText;
+            }
+            
+            buffer = Encoding.UTF8.GetBytes(responseString);
             tcpClietn.GetStream().Write(buffer, 0, buffer.Length);
             close();
         }

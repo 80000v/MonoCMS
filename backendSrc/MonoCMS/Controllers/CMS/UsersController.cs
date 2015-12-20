@@ -3,11 +3,13 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Web;
+using System.Collections.Specialized;
 using MonoCMS.Libraries.WebServer;
 using MonoCMS.Services.Core;
 using MonoCMS.Services.CMS;
-using Newtonsoft.Json;
 using MonoCMS.Models.CMS;
+using Newtonsoft.Json;
 
 namespace MonoCMS.Controllers.CMS
 {
@@ -21,12 +23,28 @@ namespace MonoCMS.Controllers.CMS
             return UsersService.getAllUsers();
         }
 
+        public static string getById(WebServerClient webServerClient)
+        {
+            NameValueCollection queryString = HttpUtility.ParseQueryString(webServerClient.queryParams);
+            string idString = queryString.Get("id");
+            if (idString != null)
+            {
+                int id;
+                int.TryParse(idString, out id);
+                return UsersService.getById(id);
+            }
+            else
+            {
+                throw new Exception("Wrong query parameters.");
+            }            
+        }
+
         public static string createUser(WebServerClient webServerClient)
         {
 
             User user = JsonConvert.DeserializeObject<User>(webServerClient.body);
             UsersService.createUser(user);
-            return "user successfully created";
+            return null;
 
         }
 
@@ -35,26 +53,44 @@ namespace MonoCMS.Controllers.CMS
 
             User user = JsonConvert.DeserializeObject<User>(webServerClient.body);
             UsersService.updateUser(user);
-            return "user successfully updated";
+            return null;
 
         }
 
         public static string deleteUser(WebServerClient webServerClient)
         {
+            
+            NameValueCollection queryString = HttpUtility.ParseQueryString(webServerClient.queryParams);
+            string idString = queryString.Get("id");
+            if (idString != null)
+            {
+                int id;
+                int.TryParse(idString, out id);
+                UsersService.deleteUser(id);
+            } else
+            {
+                throw new Exception("Wrong query parameters.");
+            }
+            
+            return null;
+        }
+
+        public static string deleteUsers(WebServerClient webServerClient)
+        {
             int id;
             int.TryParse(webServerClient.body, out id);
-            Console.WriteLine("{0} - {1}", webServerClient.body, id);
             UsersService.deleteUser(id);
-            return "user successfully deleted";
-
+            return null;
         }
 
         public static void init()
         {
             WebServerService.addRequestHandler("GET", basepath + "all", getAllUsers);
+            WebServerService.addRequestHandler("GET", basepath + "get", getById);
             WebServerService.addRequestHandler("POST", basepath + "create", createUser);
             WebServerService.addRequestHandler("POST", basepath + "update", updateUser);
-            WebServerService.addRequestHandler("POST", basepath + "delete", deleteUser);
+            WebServerService.addRequestHandler("GET", basepath + "delete", deleteUser);
+            WebServerService.addRequestHandler("POST", basepath + "delete", deleteUsers);
         }
 
     }

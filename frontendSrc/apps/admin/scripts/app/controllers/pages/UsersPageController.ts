@@ -6,7 +6,6 @@ import {FrameworkService} from '../../services/FrameworkService';
 export class UsersPageController {
 
     public selectedUser: User;
-    public userBackUp: User;
     public listOfUsers: User[] = [];
 
     constructor() {
@@ -22,7 +21,6 @@ export class UsersPageController {
     public selectUser(user: User): void {
         console.log('Select user: ', user);
         this.selectedUser = user;
-        this.userBackUp = new User().deserialize(this.selectedUser);
     }
 
     public createNewUser(): void {
@@ -33,8 +31,18 @@ export class UsersPageController {
     public cancelUserChanges(): void {
         const index: number = this.listOfUsers.indexOf(this.selectedUser);
         if (index > -1) {
-            this.listOfUsers[index] = new User().deserialize(this.userBackUp);
-            this.selectedUser = this.listOfUsers[index];
+            UserService
+                .getById(this.selectedUser.id)
+                .then((user: User) => {
+                    console.log('Use restored: ', user);
+                    this.listOfUsers[this.listOfUsers.indexOf(this.selectedUser)] = user;
+                    this.selectedUser = user;
+                    FrameworkService.redraw();
+                })
+                .catch((error: ErrorEvent) => {
+                    console.log('Error on saving new user: ', error);
+                });
+
         } else {
             this.selectedUser = void 0;
         }
@@ -67,7 +75,7 @@ export class UsersPageController {
     }
 
     public deleteUser(user: User): void {
-        if (user.id !== -1) {
+        if (user.id !== -1) { // if not new user
             UserService
                 .deleteUser(user.id)
                 .then(() => {
@@ -83,13 +91,25 @@ export class UsersPageController {
         }
     }
 
-    private updateAllUsersList(): void {
+    public updateAllUsersList(): void {
 
         UserService
             .getAllUsers()
             .then((usersList: User[]) => {
                 console.log('Users list: ', usersList);
                 this.listOfUsers = usersList;
+                // restore selected user
+                if (this.selectedUser !== void 0) {
+                    for (let i: number = 0; i < this.listOfUsers.length; i += 1) {
+                        if (this.listOfUsers[i].id === this.selectedUser.id) {
+                            console.log(this.listOfUsers[i], this.selectedUser);
+                            this.selectedUser = this.listOfUsers[i];
+                            break;
+                        } else if (i === this.listOfUsers.length - 1) { // if not found
+                            this.selectedUser = void 0;
+                        }
+                    }
+                }
                 FrameworkService.redraw();
             })
             .catch((error: ErrorEvent) => {

@@ -25,6 +25,13 @@ export function UsersPageView(ctrl: UsersPageController): MithrilVirtualElement 
                                     onclick: (): void => ctrl.createNewUser()
                                 },
                                 'Add User'
+                            ),
+                            m(
+                                'div.button',
+                                {
+                                    onclick: (): void => ctrl.updateAllUsersList()
+                                },
+                                'Refresh'
                             )
                         ]
                     ),
@@ -256,24 +263,6 @@ export function UsersPageView(ctrl: UsersPageController): MithrilVirtualElement 
                                             value: ctrl.selectedUser.url,
                                             onkeyup: function (): void {
                                                 ctrl.selectedUser.url = this.value;
-                                            }
-                                        }
-                                    )
-                                ]
-                            ),
-                            m(
-                                'div.element',
-                                [
-                                    m(
-                                        'label',
-                                        'View name:'
-                                    ),
-                                    m(
-                                        'input',
-                                        {
-                                            value: ctrl.selectedUser.viewName,
-                                            onkeyup: function (): void {
-                                                ctrl.selectedUser.viewName = this.value;
                                             }
                                         }
                                     )

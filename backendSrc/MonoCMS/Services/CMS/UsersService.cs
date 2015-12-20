@@ -16,6 +16,11 @@ namespace MonoCMS.Services.CMS
             return UsersRepository.getAllUsers();
         }
 
+        public static string getById(int id)
+        {
+            return UsersRepository.getById(id);
+        }
+
         public static void createUser(User user)
         {
             UsersRepository.createUser(user);

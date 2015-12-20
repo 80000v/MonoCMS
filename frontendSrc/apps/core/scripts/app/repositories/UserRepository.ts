@@ -21,6 +21,19 @@ export class UserRepository extends BaseRepository {
             });
     }
 
+    public static getById(id: number): Promise<User> {
+        return window
+            .fetch(
+                '/api/users/get?id=' + id,
+                new RequestOptions()
+            )
+            .then(this.errorHandler)
+            .then(this.getJSON)
+            .then(function (user: User): User {
+                return new User().deserialize(user);
+            });
+    }
+
     public static createUser(user: User): Promise<Response> {
         return window
             .fetch(

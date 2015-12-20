@@ -7,6 +7,10 @@ export class UserService {
         return UserRepository.getAllUsers();
     }
 
+    public static getById(id: number): Promise<User> {
+        return UserRepository.getById(id);
+    }
+
     public static createUser(user: User): Promise<Response> {
         return UserRepository.createUser(user);
     }
