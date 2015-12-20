@@ -6,15 +6,38 @@
 // Mithril type definitions for Typescript
 
 interface MithrilStatic {
-    (selector: string, attributes: Object, children?: any): MithrilVirtualElement;
-    (selector: string, children?: any): MithrilVirtualElement;
+
+    // div.class, {key: 1}, 'Hello, do you help me make typing? =)'
+    (selector: string,
+     attributes: Object,
+     children?: MithrilVirtualElement | MithrilVirtualElement[] |
+         MithrilComponent<MithrilController> | MithrilComponent<MithrilController>[] |
+         string): MithrilVirtualElement;
+
+    // div.class, {key: 1}, m('i.class'), 'Hello'
+    (selector: string,
+     attributes: Object,
+     children1?: MithrilVirtualElement | MithrilVirtualElement[] |
+         MithrilComponent<MithrilController> | MithrilComponent<MithrilController>[] |
+         string,
+     children2?: MithrilVirtualElement | MithrilVirtualElement[] |
+         MithrilComponent<MithrilController> | MithrilComponent<MithrilController>[] |
+         string): MithrilVirtualElement;
+
+    // div.class, 'Hello'
+    (selector: string,
+     children?: MithrilVirtualElement | MithrilVirtualElement[] |
+         MithrilComponent<MithrilController> | MithrilComponent<MithrilController>[] |
+         string): MithrilVirtualElement;
+
     prop<T>(value?: T): (value?: T) => T;
     prop<T>(promise: MithrilPromise<T>): MithrilPromiseProperty<T>;
     withAttr(property: string, callback: (value: any) => void): (e: Event) => any;
-    module(rootElement: Node, module: MithrilComponent<any>): void;
+    module(rootElement: Node, module: MithrilComponent<MithrilController>): void;
 
-    mount(rootElement: Node, module: MithrilComponent<any>): void;
-    component<T>(component: MithrilComponent<T>, args?: MithrilComponentAttributes): MithrilComponent<T>;
+    mount(rootElement: Node, module: MithrilComponent<MithrilController>): void;
+    component<T extends MithrilController>(component: MithrilComponent<T>,
+                                           args?: MithrilComponentAttributes): MithrilComponent<T>;
 
     trust(html: string): String;
     render(rootElement: HTMLElement, children?: any): void;

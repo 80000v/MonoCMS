@@ -3,6 +3,8 @@
 import {UsersPageController} from '../../controllers/pages/UsersPageController';
 import {User} from '../../../../../core/scripts/app/models/classes/UserModel';
 
+const timestampISORegex: RegExp = /^([\+-]?\d{4}(?!\d{2}\b))((-?)((0[1-9]|1[0-2])(\3([12]\d|0[1-9]|3[01]))?|W([0-4]\d|5[0-2])(-?[1-7])?|(00[1-9]|0[1-9]\d|[12]\d{2}|3([0-5]\d|6[1-6])))([T\s]((([01]\d|2[0-3])((:?)[0-5]\d)?|24\:?00)([\.,]\d+(?!:))?)?(\17[0-5]\d([\.,]\d+)?)?([zZ]|([\+-])([01]\d|2[0-3]):?([0-5]\d)?)?)?)?$/g;
+
 export function UsersPageView(ctrl: UsersPageController): MithrilVirtualElement {
     'use strict';
 
@@ -14,6 +16,10 @@ export function UsersPageView(ctrl: UsersPageController): MithrilVirtualElement 
                 [
                     m(
                         'div.title',
+                        m(
+                            'i.material-icons',
+                            'contacts'
+                        ),
                         'Users list:'
                     ),
                     m(
@@ -24,6 +30,10 @@ export function UsersPageView(ctrl: UsersPageController): MithrilVirtualElement 
                                 {
                                     onclick: (): void => ctrl.createNewUser()
                                 },
+                                m(
+                                    'i.material-icons',
+                                    'person_add'
+                                ),
                                 'Add User'
                             ),
                             m(
@@ -31,6 +41,10 @@ export function UsersPageView(ctrl: UsersPageController): MithrilVirtualElement 
                                 {
                                     onclick: (): void => ctrl.updateAllUsersList()
                                 },
+                                m(
+                                    'i.material-icons',
+                                    'sync'
+                                ),
                                 'Refresh'
                             )
                         ]
@@ -97,6 +111,10 @@ export function UsersPageView(ctrl: UsersPageController): MithrilVirtualElement 
                 [
                     m(
                         'div.title',
+                        m(
+                            'i.material-icons',
+                            'contact_mail'
+                        ),
                         'User editing:'
                     ),
                     ctrl.selectedUser !== void 0 ? m(
@@ -107,6 +125,10 @@ export function UsersPageView(ctrl: UsersPageController): MithrilVirtualElement 
                                 {
                                     onclick: (): void => ctrl.saveUser(ctrl.selectedUser)
                                 },
+                                m(
+                                    'i.material-icons',
+                                    'save'
+                                ),
                                 ctrl.selectedUser.id !== -1 ? 'Save Changes' : 'Save New User'
                             ),
                             m(
@@ -114,6 +136,10 @@ export function UsersPageView(ctrl: UsersPageController): MithrilVirtualElement 
                                 {
                                     onclick: (): void => ctrl.cancelUserChanges()
                                 },
+                                m(
+                                    'i.material-icons',
+                                    'cancel'
+                                ),
                                 'Cancel Changes'
                             ),
                             m(
@@ -121,6 +147,10 @@ export function UsersPageView(ctrl: UsersPageController): MithrilVirtualElement 
                                 {
                                     onclick: (): void => ctrl.deleteUser(ctrl.selectedUser)
                                 },
+                                m(
+                                    'i.material-icons',
+                                    'delete'
+                                ),
                                 'Delete User'
                             )
                         ]
@@ -198,7 +228,9 @@ export function UsersPageView(ctrl: UsersPageController): MithrilVirtualElement 
                                         {
                                             value: ctrl.selectedUser.registered,
                                             onkeyup: function (): void {
-                                                ctrl.selectedUser.registered = this.value;
+                                                if (this.value.match(timestampISORegex) !== null) {
+                                                    ctrl.selectedUser.registered = this.value;
+                                                }
                                             }
                                         }
                                     )
@@ -216,7 +248,7 @@ export function UsersPageView(ctrl: UsersPageController): MithrilVirtualElement 
                                         {
                                             value: ctrl.selectedUser.status,
                                             onkeyup: function (): void {
-                                                ctrl.selectedUser.status = this.value;
+                                                ctrl.selectedUser.status = Number(this.value);
                                             }
                                         }
                                     )

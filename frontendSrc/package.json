@@ -28,8 +28,8 @@
     "toastr": "global:toastr"
   },
   "dependencies": {
-    "mithril": "^0.2.0",
     "core-js": "^1.1.4",
+    "mithril": "^0.2.0",
     "sweetalert": "^1.1.0",
     "translit": "0.0.1",
     "translit-russian": "0.0.2",
