@@ -97,7 +97,15 @@ export class UsersPageController {
             .getAllUsers()
             .then((usersList: User[]) => {
                 console.log('Users list: ', usersList);
-                this.listOfUsers = usersList;
+                this.listOfUsers = usersList.sort((userA: User, userB: User) => {
+                    if (userA.id < userB.id) {
+                        return -1;
+                    }
+                    if (userA.id > userB.id) {
+                        return 1;
+                    }
+                    return 0;
+                });
                 // restore selected user
                 if (this.selectedUser !== void 0) {
                     for (let i: number = 0; i < this.listOfUsers.length; i += 1) {

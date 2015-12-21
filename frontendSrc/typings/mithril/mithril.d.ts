@@ -7,22 +7,11 @@
 
 interface MithrilStatic {
 
-    // div.class, {key: 1}, 'Hello, do you help me make typing? =)'
     (selector: string,
-     attributes: Object,
-     children?: MithrilVirtualElement | MithrilVirtualElement[] |
+     attributes: MithrilAttributes,
+     ...children: Array< MithrilVirtualElement | MithrilVirtualElement[] |
          MithrilComponent<MithrilController> | MithrilComponent<MithrilController>[] |
-         string): MithrilVirtualElement;
-
-    // div.class, {key: 1}, m('i.class'), 'Hello'
-    (selector: string,
-     attributes: Object,
-     children1?: MithrilVirtualElement | MithrilVirtualElement[] |
-         MithrilComponent<MithrilController> | MithrilComponent<MithrilController>[] |
-         string,
-     children2?: MithrilVirtualElement | MithrilVirtualElement[] |
-         MithrilComponent<MithrilController> | MithrilComponent<MithrilController>[] |
-         string): MithrilVirtualElement;
+         string>): MithrilVirtualElement;
 
     // div.class, 'Hello'
     (selector: string,
@@ -37,7 +26,7 @@ interface MithrilStatic {
 
     mount(rootElement: Node, module: MithrilComponent<MithrilController>): void;
     component<T extends MithrilController>(component: MithrilComponent<T>,
-                                           args?: MithrilComponentAttributes): MithrilComponent<T>;
+                                           args?: MithrilAttributes): MithrilComponent<T>;
 
     trust(html: string): String;
     render(rootElement: HTMLElement, children?: any): void;
@@ -124,14 +113,14 @@ interface MithrilController {
     onunload?(event: MithrilEvent): void;
 }
 
-interface MithrilComponentAttributes {
+interface MithrilAttributes {
     [key: string]: any;
     key?: number|string;
 }
 
 interface MithrilComponent<TController extends MithrilController> {
-    controller(args: MithrilComponentAttributes): TController;
-    view(ctrl: TController, args: MithrilComponentAttributes): MithrilVirtualElement;
+    controller(args: MithrilAttributes): TController;
+    view(ctrl: TController, args: MithrilAttributes): MithrilVirtualElement;
 }
 
 declare var Mithril: MithrilStatic;

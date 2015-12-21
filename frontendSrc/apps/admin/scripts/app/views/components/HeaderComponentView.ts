@@ -10,6 +10,9 @@ export function HeaderComponentView(ctrl: HeaderComponentController): MithrilVir
         [
             m(
                 'div.logo',
+                {
+                    onclick: (): void => location.reload()
+                },
                 'MonoCMS'
             ),
             m(

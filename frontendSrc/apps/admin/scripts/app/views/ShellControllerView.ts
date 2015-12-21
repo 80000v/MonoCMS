@@ -30,6 +30,13 @@ const homePage: Page = new Page(() => new HomePageController(), HomePageView);
 homePage.name = 'home';
 homePage.title = 'Home';
 
+import {PostsPageController} from '../controllers/pages/PostsPageController';
+import {PostsPageView} from './pages/PostsPageView';
+
+const postsPage: Page = new Page(() => new PostsPageController(), PostsPageView);
+postsPage.name = 'posts';
+postsPage.title = 'Posts';
+
 import {UsersPageController} from '../controllers/pages/UsersPageController';
 import {UsersPageView} from './pages/UsersPageView';
 
@@ -38,7 +45,7 @@ usersPage.name = 'users';
 usersPage.title = 'Users';
 
 const currentAppKey: string = UrlParam.getUrlParams().get('app');
-const appManager: PagesManager = new PagesManager(homePage, [homePage, usersPage]);
+const appManager: PagesManager = new PagesManager(homePage, [homePage, postsPage, usersPage]);
 for (let i: number = 0; i < appManager.listOfApps.length; i += 1) {
     if (appManager.listOfApps[i].name === currentAppKey) {
         appManager.currentApp = appManager.listOfApps[i];

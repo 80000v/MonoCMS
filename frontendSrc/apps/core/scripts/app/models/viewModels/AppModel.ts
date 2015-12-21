@@ -4,7 +4,7 @@ export class Page {
 
     public static appSequence: number = 1;
 
-    public controller: (args?: MithrilComponentAttributes) => MithrilController;
+    public controller: (args?: MithrilAttributes) => MithrilController;
     public view: (ctrl?: MithrilController) => MithrilVirtualElement;
 
     public id: number;
@@ -12,7 +12,7 @@ export class Page {
     public name: string = '';
     public title: string = '';
 
-    constructor(controller: (args?: MithrilComponentAttributes) => MithrilController,
+    constructor(controller: (args?: MithrilAttributes) => MithrilController,
                 view: (ctrl?: MithrilController) => MithrilVirtualElement) {
 
         this.controller = controller;
