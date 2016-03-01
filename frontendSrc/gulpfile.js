@@ -12,7 +12,7 @@
         throw new Error(message);
     }
 
-    const minNodeVersion = [5, 1, 1];
+    const minNodeVersion = [5, 7, 0];
     const nodeVersion = process
         .version
         .substring(1, process.version.length)
